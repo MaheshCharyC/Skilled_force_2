@@ -1,0 +1,71 @@
+﻿@model User
+
+
+@{ ViewData["Title"] = "Skilled Force Registration Page"; }
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                @if (ViewBag.edit)
+                {
+                    <h3 class="mb-5">Edit personal information</h3>
+                }
+                else
+                {
+                    <h3 class="mb-5">Sign Up</h3>
+                } 
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Email)
+                   @Html.TextBoxFor(m => m.Email, null, new { @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.FirstName)
+                   @Html.TextBoxFor(m => m.FirstName, null, new { @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.LastName)
+                   @Html.TextBoxFor(m => m.LastName, null, new { @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Gender)
+                   @Html.DropDownListFor(m => m.Gender, (IEnumerable<SelectListItem>)ViewBag.Gender, new { id = "Gender", @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Phone)
+                   @Html.TextBoxFor(m => m.Phone, null, new { @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Role)
+                   @Html.DropDownListFor(m => m.RoleId, (IEnumerable<SelectListItem>)ViewBag.roles, new { id = "roles", @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Password)
+                   @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-lg" })
+                </div>
+                @if (ViewBag.edit)
+                {
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Submit Details</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+                    <hr class="my-4">
+                    @Html.ActionLink("Sign In", "LoginForm", "Account")
+                }                 
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
