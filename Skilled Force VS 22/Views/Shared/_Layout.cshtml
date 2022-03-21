@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Skilled Force</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" type="text/css" href="../Styles/JobList.scss" />
+    <link href="@Url.Content("~/css/JobList.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
-    @if (TempData.ContainsKey("FirstName")) {
+    @if (TempData.ContainsKey("FirstName"))
+    {
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">              
+                <div class="container">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Skilled_Force</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
@@ -34,18 +35,20 @@
                                 </li>
                             }
                             <li class="nav-item">
-                                  <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">@TempData.Peek("FirstName")</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">@TempData.Peek("FirstName")</a>
                             </li>
                         </ul>
                     </div>
+                    <div class="navbar-right">
+                        @Html.ActionLink("Logout", "Logout", "Account",null, new { id = "roles", @class = "pull-right btn btn-primary" } )
+                    </div>
                 </div>
 
-                <div class="navbar-right">
-                    @Html.ActionLink("Logout", "Logout", "Account", new { id = "roles", @class = "pull-right" } )
-                </div>
+
             </nav>
         </header>
-    }  else
+    }
+    else
     {
         <div class="container text-center pt-3">
             <h1>Welcome to Skilled Force</h1>
@@ -57,7 +60,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted navbar fixed-bottom">
         <div class="container">
             &copy; 2022 - Skilled_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
