@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Skilled_Force_VS_22.Models
+@{
     ViewData["Title"] = "Skilled Force";
 }
 @model Job
@@ -9,7 +10,7 @@
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
-<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/css/JobList.css")" rel="stylesheet" type="text/css" />
 
 
 <div class="container">
@@ -24,39 +25,25 @@
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60">
-
-                        @*<form action="#" class="career-form mb-60">*@
                         @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60"  }))
                         {
                             <div class="row">
                                 <div class="col-md-6 col-lg-3 my-3">
                                     <div class="input-group position-relative">
-                                        @*<input type="text" class="form-control" placeholder="Enter Your Keywords" id="keywords">*@
+                                        @Html.Label("Keyword search", null, new { id = "Keyword", @class = "form-control" })
                                         @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control" })
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-3 my-3">
-                                    <div class="select-container">
-                                        @Html.Label("Location")
-                                        @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "form-control form-control-lg" })
-                                        @*<select class="custom-select">
-                                            <option selected="">Location</option>
-                                            <option value="1">Jaipur</option>
-                                            <option value="2">Pune</option>
-                                            <option value="3">Bangalore</option>
-                                        </select>*@
+                                    <div class="">
+                                        @Html.Label("Location", null, new { id = "Location", @class = "form-control" })
+                                        @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "custom-select" })
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-3 my-3">
-                                    <div class="select-container">
-                                        @Html.Label("Job Type")
-                                        @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "form-control form-control-lg" })
-                                        @*<select class="custom-select">
-                                            <option selected="">Select Job Type</option>
-                                            <option value="1">Ui designer</option>
-                                            <option value="2">JS developer</option>
-                                            <option value="3">Web developer</option>
-                                        </select>*@
+                                    <div class="">
+                                        @Html.Label("Job Type", null, new { id = "JobType", @class = "form-control" })
+                                        @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-3 my-3">
