@@ -25,40 +25,47 @@
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60">
 
-                        <form action="#" class="career-form mb-60">
+                        @*<form action="#" class="career-form mb-60">*@
+                        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60"  }))
+                        {
                             <div class="row">
                                 <div class="col-md-6 col-lg-3 my-3">
                                     <div class="input-group position-relative">
-                                        <input type="text" class="form-control" placeholder="Enter Your Keywords" id="keywords">
+                                        @*<input type="text" class="form-control" placeholder="Enter Your Keywords" id="keywords">*@
+                                        @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control" })
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-3 my-3">
                                     <div class="select-container">
-                                        <select class="custom-select">
+                                        @Html.Label("Location")
+                                        @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "form-control form-control-lg" })
+                                        @*<select class="custom-select">
                                             <option selected="">Location</option>
                                             <option value="1">Jaipur</option>
                                             <option value="2">Pune</option>
                                             <option value="3">Bangalore</option>
-                                        </select>
+                                        </select>*@
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-3 my-3">
                                     <div class="select-container">
-                                        <select class="custom-select">
+                                        @Html.Label("Job Type")
+                                        @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "form-control form-control-lg" })
+                                        @*<select class="custom-select">
                                             <option selected="">Select Job Type</option>
                                             <option value="1">Ui designer</option>
                                             <option value="2">JS developer</option>
                                             <option value="3">Web developer</option>
-                                        </select>
+                                        </select>*@
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-3 my-3">
-                                    <button type="button" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
+                                    <button type="submit" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
                                         Search
                                     </button>
                                 </div>
                             </div>
-                        </form>
+                        }
 
                         <div class="filter-result">
                             <p class="mb-30 ff-montserrat">Total Job Openings : @Enumerable.Count(ViewBag.jobs)</p>

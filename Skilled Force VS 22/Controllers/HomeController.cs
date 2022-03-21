@@ -3,6 +3,7 @@ using Skilled_Force_VS_22.Manager;
 using Skilled_Force_VS_22.Models;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Skilled_Force_VS_22.Controllers
 {
@@ -17,16 +18,18 @@ namespace Skilled_Force_VS_22.Controllers
             this.skilledForceDB = skilledForceDB;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string keywords, string location, string jobType)
         {
             if (TempData.Peek("UserId") != null)
             {
-                ViewBag.jobs = GetList();
+                loadMetaInfo();
+                ViewBag.jobs = GetList(keywords, location, jobType);
                 return View();
             }
             else
                 return RedirectToAction("LoginForm", "Account");
         }
+
 
         public IActionResult Privacy()
         {
@@ -38,20 +41,47 @@ namespace Skilled_Force_VS_22.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public List<Job> GetList()
+        public List<Job> GetList(string keywords, string location, string jobtype)
         {
+            List<Job>? jobs = null;
+            IQueryable<Job>? sqlData = null;
             if (TempData.Peek("RoleId").Equals("2"))
-            {
-                return skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == TempData.Peek("UserId").ToString()).OrderByDescending(j => j.UpdatedAt).ToList();
-            }
-            else if (TempData.Peek("RoleId").Equals("1"))
+                sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == TempData.Peek("UserId").ToString());
+            else 
+                sqlData = skilledForceDB.Job.Include(job => job.Users);
+
+            if (keywords != null && keywords != "")
+                sqlData = sqlData.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
+                            j.EmploymentType.Contains(keywords) || j.Location.Contains(keywords) || j.JobType.Contains(keywords));
+            if (location != null && location != "")
+                sqlData = sqlData.Where(j => j.Location.Contains(location));
+            if (jobtype != null && jobtype  != "")
+                sqlData = sqlData.Where(j => j.JobType.Contains(jobtype));
+
+            jobs = sqlData.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt).ToList();
+            if (TempData.Peek("RoleId").Equals("1"))
             {
                 User user = skilledForceDB.User.Where(u => u.UserId.Equals(TempData.Peek("UserId").ToString())).FirstOrDefault(); ;
-                List<Job> allJobs = skilledForceDB.Job.Include(job => job.Users).ToList();
-                allJobs.ForEach(job => job.IsApplied = job.Users.Contains(user));
-                return allJobs;
+                jobs.ForEach(job => job.IsApplied = job.Users.Contains(user));
             }
-            return skilledForceDB.Job.Include(job => job.Users).ToList();
+
+            return jobs;
+        }
+
+        private void loadMetaInfo()
+        {
+            ViewBag.Locations = new List<SelectListItem>() {
+                    new SelectListItem { Value = "", Text = "Select Location"},
+                    new SelectListItem { Value = "Chicago", Text = "Chicago"},
+                    new SelectListItem { Value = "Michigan", Text = "Michigan"},
+                    new SelectListItem { Value = "New York", Text = "New York"}
+                };
+            ViewBag.jobTypes = new List<SelectListItem>() {
+                    new SelectListItem { Value = "", Text = "Select Job Type"},
+                    new SelectListItem { Value = "Front End Developer", Text = "Front End Developer"},
+                    new SelectListItem { Value = "Java Developer", Text = "Java Developer"},
+                    new SelectListItem { Value = "Web Developer", Text = "Web Developer"}
+                };
         }
     }
 }
