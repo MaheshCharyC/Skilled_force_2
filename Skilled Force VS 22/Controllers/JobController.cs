@@ -20,6 +20,7 @@ namespace Skilled_Force_VS_22.Controllers
         public IActionResult JobPostForm()
         {
             addMetaDataToViewBag();
+            ViewBag.edit = false;
             return View("JobPostForm");
         }
 
