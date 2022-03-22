@@ -43,21 +43,21 @@ namespace Skilled_Force_VS_22.Manager
                     {
                         Email ="seeker@gmail.com",
                         Password="test",
-                        FirstName="JobSeekeer F",
-                        LastName= "L",
+                        FirstName="John",
+                        LastName= "Smith",
                         Gender="Male",
                         RoleId = "1",
-                        Phone ="0000000000"
+                        Phone ="4989895454"
                     },
                     new User
                     {
                         Email = "recruiter@gmail.com",
                         Password = "test",
-                        FirstName = "Recruiter F",
-                        LastName = "Recruiter L",
+                        FirstName = "Lisa",
+                        LastName = "phill",
                         Gender = "Female",
                         RoleId = "2",
-                        Phone = "0000000000"
+                        Phone = "5989895454"
                     },
                     new User
                     {
@@ -67,7 +67,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "Admin L",
                         Gender = "Male",
                         RoleId = "3",
-                        Phone = "0000000000"
+                        Phone = "6989895454"
                     }
 
                 );
@@ -76,10 +76,10 @@ namespace Skilled_Force_VS_22.Manager
                     {
                         Title = "Test Job 1",
                         Description = "Test data 2",
-                        JobType="",
-                        EmploymentType="",
-                        Salary="",
-                        Location="",
+                        JobType= "Front End Developer",
+                        EmploymentType="Full Time",
+                        Salary="5000$ - 10000$ PM",
+                        Location="New York",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
                         CreatedBy = "2",
@@ -89,10 +89,10 @@ namespace Skilled_Force_VS_22.Manager
                     {
                         Title = "Test Job 2",
                         Description = "Test data 2",
-                        JobType = "",
-                        EmploymentType = "",
-                        Salary = "",
-                        Location = "",
+                        JobType = "Java Developer",
+                        EmploymentType = "Part Time",
+                        Salary = "10000$ - 15000$ PM",
+                        Location = "Chicago",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
                         CreatedBy = "2",
