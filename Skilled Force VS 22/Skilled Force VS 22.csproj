@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\CompanyRegistrationForm.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_WebToolingArtifacts Remove="Properties\serviceDependencies.json" />
     <_WebToolingArtifacts Remove="Properties\serviceDependencies.local.json" />
   </ItemGroup>
@@ -20,6 +24,7 @@
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="Views\Account\LoginForm.cshtml" />
+    <None Include="Views\Account\CompanyRegistrationForm.cshtml" />
     <None Include="Views\Account\RegistrationForm.cshtml" />
     <None Include="Views\Job\JobPostForm.cshtml" />
   </ItemGroup>

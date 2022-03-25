@@ -68,6 +68,14 @@ namespace Skilled_Force_VS_22.Controllers
             return View("RegistrationForm");
         }
 
+        [HttpGet]
+        public IActionResult CompanyRegister()
+        {
+            LoadMetaData();
+            ViewBag.edit = false;
+            return View("CompanyRegistrationForm");
+        }
+
         [HttpPost]
         public IActionResult Register(User user)
         {
@@ -89,7 +97,7 @@ namespace Skilled_Force_VS_22.Controllers
                     ViewBag.success = true;
                     return RedirectToAction("Index", "Home");
                 }
-                User exisitngUser = getUserIfExists(user.Email, user.Password);
+                User exisitngUser = skilledForceDB.User.Where(u => u.Email == user.Email).FirstOrDefault();
                 if (exisitngUser == null)
                 {
                     skilledForceDB.User.Add(user);
@@ -141,6 +149,10 @@ namespace Skilled_Force_VS_22.Controllers
 
         public void UpdateUserData(User user)
         {
+            HttpContext.Session.SetString("UserId", user.UserId.ToString());
+            HttpContext.Session.SetString("Email", user.Email);
+            HttpContext.Session.SetString("FirstName", user.FirstName);
+            HttpContext.Session.SetString("RoleId", user.RoleId);
             TempData["UserId"] = user.UserId.ToString();
             TempData["Email"] = user.Email;
             TempData["FirstName"] = user.FirstName;
@@ -153,7 +165,7 @@ namespace Skilled_Force_VS_22.Controllers
             return users;
         }
 
-
+        
 
     }
 }
