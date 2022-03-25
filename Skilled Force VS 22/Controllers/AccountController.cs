@@ -73,6 +73,10 @@ namespace Skilled_Force_VS_22.Controllers
         {
             ModelState.Remove("Jobs");
             ModelState.Remove("Role");
+            ModelState.Remove("Role.RoleId");
+            ModelState.Remove("Role.Name");
+            ModelState.Remove("Role.Users");
+            ModelState.Remove("Role.Description");
             ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
@@ -123,10 +127,9 @@ namespace Skilled_Force_VS_22.Controllers
         public void LoadMetaData()
         {
             List<SelectListItem> roles = new List<SelectListItem>();
+            roles.Add(new SelectListItem { Value = "", Text = "Select Role" });
             foreach (Role role in GetRoles())
-            {
                 roles.Add(new SelectListItem { Value = role.RoleId, Text = role.Name });
-            }
             ViewBag.roles = roles;
             ViewBag.Gender = new List<SelectListItem>() {
                 new SelectListItem { Value = "", Text = ""},
@@ -143,5 +146,14 @@ namespace Skilled_Force_VS_22.Controllers
             TempData["FirstName"] = user.FirstName;
             TempData["RoleId"] = user.RoleId;
         }
+
+        public List<User> Users()
+        {
+            List<User> users = skilledForceDB.User.Where(u => u.RoleId.Equals(2)).ToList();
+            return users;
+        }
+
+
+
     }
 }

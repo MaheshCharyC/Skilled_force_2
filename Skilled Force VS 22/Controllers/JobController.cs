@@ -82,9 +82,9 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult JobEditForm(string jobId)
         {
-            addMetaDataToViewBag();
             Job job = skilledForceDB.Job.Where(j => j.JobId == jobId).FirstOrDefault();
             ViewBag.edit = true;
+            addMetaDataToViewBag();
             return View("JobPostForm", job);
         }
 

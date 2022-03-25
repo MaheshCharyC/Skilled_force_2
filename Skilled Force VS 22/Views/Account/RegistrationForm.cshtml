@@ -19,12 +19,15 @@
                 } 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-outline mb-4">
-                   @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                   @Html.LabelFor(m => m.Email)
-                   @Html.TextBoxFor(m => m.Email, null, new { @class = "form-control form-control-lg" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    @Html.LabelFor(m => m.Email)
+                    @if (ViewBag.edit)
+                       @Html.TextBoxFor(m => m.Email, null, new { @class = "form-control form-control-lg", @readonly="readonly"})
+                    else 
+                       @Html.TextBoxFor(m => m.Email, null, new { @class = "form-control form-control-lg" })
                 </div>
                 <div class="form-outline mb-4">
-                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                   @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.FirstName)
                    @Html.TextBoxFor(m => m.FirstName, null, new { @class = "form-control form-control-lg" })
                 </div>
@@ -36,17 +39,23 @@
                 <div class="form-outline mb-4">
                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.Gender)
-                   @Html.DropDownListFor(m => m.Gender, (IEnumerable<SelectListItem>)ViewBag.Gender, new { id = "Gender", @class = "form-control form-control-lg" })
+                   @Html.DropDownListFor(m => m.Gender, (IEnumerable<SelectListItem>)ViewBag.Gender, new { @class = "form-control form-control-lg" })
                 </div>
                 <div class="form-outline mb-4">
                    @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.Phone)
                    @Html.TextBoxFor(m => m.Phone, null, new { @class = "form-control form-control-lg" })
-                </div>
+                </div>                
                 <div class="form-outline mb-4">
-                   @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
-                   @Html.LabelFor(m => m.Role)
-                   @Html.DropDownListFor(m => m.RoleId, (IEnumerable<SelectListItem>)ViewBag.roles, new { id = "roles", @class = "form-control form-control-lg" })
+                    @Html.ValidationMessageFor(m => m.Role.Name, "", new { @class = "text-danger" })
+                    @Html.LabelFor(m => m.Role.Name)
+                    @if (ViewBag.edit)
+                    {                                
+                        @Html.TextBoxFor(m => m.Role.Name, null, new { @class = "form-control form-control-lg", @readonly="readonly", disabled="disabled"})        
+                        @Html.HiddenFor(m => m.RoleId)
+                    }
+                    else 
+                        @Html.DropDownListFor(m => m.RoleId, (IEnumerable<SelectListItem>)ViewBag.roles, new { @class = "form-control form-control-lg" })
                 </div>
                 <div class="form-outline mb-4">
                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
