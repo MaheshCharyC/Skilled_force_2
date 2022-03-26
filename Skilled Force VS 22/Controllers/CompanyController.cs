@@ -35,7 +35,7 @@ namespace Skilled_Force_VS_22.Controllers
                 company = skilledForceDB.Company
                    .Include(c => c.CompanyReviews)
                    .ThenInclude(c => c.User)
-                   .Where(c => c.UserId.Equals(TempData.Peek("UserId"))).FirstOrDefault();
+                   .Where(c => c.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
             }
 
 
