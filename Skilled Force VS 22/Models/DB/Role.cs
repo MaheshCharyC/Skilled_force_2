@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
-namespace Skilled_Force_VS_22.Models
+namespace Skilled_Force_VS_22.Models.DB
 {
     public class Role
     {

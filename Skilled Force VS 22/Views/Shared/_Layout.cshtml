@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="@Url.Content("~/css/JobList.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
@@ -37,6 +38,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">@TempData.Peek("FirstName")</a>
                             </li>
+                             @if (TempData.ContainsKey("RoleId") && TempData.Peek("RoleId").Equals("3"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="GetCompanyDetails">Company Details</a>
+                                </li>
+                            }
                         </ul>
                     </div>
                     <div class="navbar-right">

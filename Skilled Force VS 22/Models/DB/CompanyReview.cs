@@ -19,13 +19,18 @@ namespace Skilled_Force_VS_22.Models.DB
         public int Rating { get; set; }
 
         [Required]
+        public DateTime Time { get; set; }
+
+        [Required]
         public string comment { get; set; }
 
         [Required]
         public string UserId { get; set; }
 
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
+        [ForeignKey("CompanyId")]
         public virtual Company Company { get; set; }
 
 
