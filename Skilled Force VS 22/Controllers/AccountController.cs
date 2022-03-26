@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Skilled_Force_VS_22.Manager;
+using Skilled_Force_VS_22.Models.DB;
 using Skilled_Force_VS_22.Models;
 using System.Collections.Generic;
 using System.Diagnostics;

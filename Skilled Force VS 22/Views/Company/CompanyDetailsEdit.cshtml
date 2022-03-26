@@ -1,0 +1,34 @@
+﻿@model Company
+
+
+@{
+    ViewData["Title"] = "Edit Company Details";
+}
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    @using (Html.BeginForm("EditCompanyDetails", "Company", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.CompanyId)
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="typeEmailX-2">Company Name</label>
+                            @Html.TextBoxFor(m => m.Name, null, new { @class = "form-control form-control-lg", @Value = Model.Name})
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="typeEmailX-2">Description</label>
+                            @Html.TextAreaFor(m => m.Description, 10, 10, new { @class = "form-control form-control-lg", @Value = Model.Description})
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Save</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

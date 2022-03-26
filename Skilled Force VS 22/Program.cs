@@ -46,6 +46,9 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
        name: "default",
        pattern: "{controller=Job}/{action=PostJob}");
+    endpoints.MapControllerRoute(
+       name: "default",
+       pattern: "{controller=Company}/{action=GetCompanyDetails}");
 });
 /*
 app.MapControllerRoute(
