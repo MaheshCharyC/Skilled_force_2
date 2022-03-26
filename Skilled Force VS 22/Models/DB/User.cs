@@ -42,8 +42,9 @@ namespace Skilled_Force_VS_22.Models.DB
         [StringLength(50)]
         public string Email { get; set; }
 
-        [Required]
         public string RoleId { get; set; }
+
+        public string CompanyId { get; set; }
 
         [Required(ErrorMessage = "Please enter password")]
         [Column("Password")]

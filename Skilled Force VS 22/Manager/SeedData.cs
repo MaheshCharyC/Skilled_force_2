@@ -48,6 +48,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "Smith",
                         Gender = "Male",
                         RoleId = "1",
+                        CompanyId = "1",
                         Phone = "4989895454"
                     },
                     new User
@@ -58,6 +59,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "phill",
                         Gender = "Female",
                         RoleId = "2",
+                        CompanyId = "1",
                         Phone = "5989895454"
                     },
                     new User
@@ -68,6 +70,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "Admin L",
                         Gender = "Male",
                         RoleId = "3",
+                        CompanyId = "1",
                         Phone = "6989895454",
                         UserId = "3",
                     }

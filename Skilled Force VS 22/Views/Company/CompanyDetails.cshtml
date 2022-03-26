@@ -11,7 +11,9 @@
 
         @{
             int totalRatingCount = Model.CompanyReviews.Count;
-            int totalRating = (int)MathF.Round((float)Model.CompanyReviews.Select(c => c.Rating).Average());
+            int totalRating = 0;
+            if(Model.CompanyReviews != null)
+                totalRating = (int)MathF.Round((float)Model.CompanyReviews.Select(c => c.Rating).Average());
         }
         <h2 class="col-12 font-weight-light">
             @Model.Name

@@ -1,24 +1,26 @@
 ﻿@model User
 
 
-@{ ViewData["Title"] = "Skilled Force Company Registration Page"; }
+@{ ViewData["Title"] = "Skilled Force User CreationPage"; }
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
           <div class="card-body p-5 text-center">
-            @using (Html.BeginForm("CompanyRegister", "Account", FormMethod.Post))
+            @using (Html.BeginForm("RecruiterRegister", "Account", FormMethod.Post))
             {
                 @if (ViewBag.edit)
                 {
-                    <h3 class="mb-5">Edit personal information</h3>
+                    <h3 class="mb-5">Edit user information</h3>
+                    @Html.Hidden("UserId", Model.UserId)
                 }
                 else
                 {
-                    <h3 class="mb-5">Sign Up as Company</h3>
+                    <h3 class="mb-5">Create User</h3>
                 } 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.Hidden("RoleId", 3)
+                @Html.Hidden("RoleId", 2)
+                @Html.Hidden("CompanyId", @Context.Session.GetString("CompanyId"))
                 <div class="form-outline mb-4">
                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     @Html.LabelFor(m => m.Email)
@@ -46,17 +48,7 @@
                    @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.Phone)
                    @Html.TextBoxFor(m => m.Phone, null, new { @class = "form-control form-control-lg" })
-                </div>                
-                <div class="form-outline mb-4">
-                    @Html.ValidationMessageFor(m => m.Company.Name, "", new { @class = "text-danger" })
-                    @Html.Label("Company Name")
-                    @Html.TextBoxFor(m => m.Company.Name, null, new { @class = "form-control form-control-lg" })
-                </div>
-                <div class="form-outline mb-4">
-                    @Html.ValidationMessageFor(m => m.Company.Description, "", new { @class = "text-danger" })
-                    @Html.LabelFor(m => m.Company.Description)
-                    @Html.TextAreaFor(m => m.Company.Description, 10, 10, new { @class = "form-control form-control-lg" })
-                </div>
+                </div>     
                 <div class="form-outline mb-4">
                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.Password)
@@ -68,9 +60,7 @@
                 }
                 else
                 {
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
-                    <hr class="my-4">
-                    @Html.ActionLink("Sign In", "LoginForm", "Account")
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Add User</button>
                 }                 
             }
           </div>

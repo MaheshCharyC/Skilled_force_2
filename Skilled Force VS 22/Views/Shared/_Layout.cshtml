@@ -11,7 +11,7 @@
 
 </head>
 <body>
-    @if (TempData.ContainsKey("FirstName"))
+    @if (@Context.Session.GetString("FirstName") != null)
     {
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -29,17 +29,20 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
-                            @if (TempData.ContainsKey("RoleId") && TempData.Peek("RoleId").Equals("2"))
+                            @if (@Context.Session.GetString("RoleId") != null && @Context.Session.GetString("RoleId").Equals("2"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Job" asp-action="JobPostForm">Post Job</a>
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">@TempData.Peek("FirstName")</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">@Context.Session.GetString("FirstName")</a>
                             </li>
-                             @if (TempData.ContainsKey("RoleId") && TempData.Peek("RoleId").Equals("3"))
+                             @if (@Context.Session.GetString("RoleId") != null && @Context.Session.GetString("RoleId").Equals("3"))
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="GetRecruiters">Manage Users</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="GetCompanyDetails">Company Details</a>
                                 </li>

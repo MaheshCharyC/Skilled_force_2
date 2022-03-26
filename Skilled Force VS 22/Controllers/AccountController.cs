@@ -45,7 +45,7 @@ namespace Skilled_Force_VS_22.Controllers
             User exisitngUser = getUserIfExists(login.Email, login.Password);
             if (exisitngUser != null)
             {
-                UpdateUserData(exisitngUser);
+                UpdateSession(exisitngUser);
                 ViewBag.success = true;
                 return RedirectToAction("Index", "Home");
             }
@@ -80,24 +80,28 @@ namespace Skilled_Force_VS_22.Controllers
             return View("CompanyRegistrationForm");
         }
 
+
+        [HttpGet]
+        public IActionResult RecruiterRegister()
+        {
+            LoadMetaData();
+            ViewBag.edit = false;
+            return View("RecruiterRegistrationForm");
+        }
+
+
         [HttpPost]
         public IActionResult Register(User user)
         {
-            ModelState.Remove("Jobs");
-            ModelState.Remove("Role");
-            ModelState.Remove("Role.RoleId");
-            ModelState.Remove("Role.Name");
-            ModelState.Remove("Role.Users");
-            ModelState.Remove("Role.Description");
-            ModelState.Remove("UserId");
+            SetModel();
             if (ModelState.IsValid)
             {
-                if (HttpContext.Session.IsAvailable)
+                if (HttpContext.Session.GetString("UserId") != null)
                 {
                     user.UserId = HttpContext.Session.GetString("UserId").ToString();
                     skilledForceDB.User.Update(user);
                     skilledForceDB.SaveChanges();
-                    UpdateUserData(user);
+                    UpdateSession(user);
                     ViewBag.success = true;
                     return RedirectToAction("Index", "Home");
                 }
@@ -115,23 +119,43 @@ namespace Skilled_Force_VS_22.Controllers
         }
 
         [HttpPost]
-        public IActionResult CompanyRegister(User user)
+        public IActionResult RecruiterRegister(User user)
         {
-            ModelState.Remove("Jobs");
-            ModelState.Remove("Role");
-            ModelState.Remove("Role.RoleId");
-            ModelState.Remove("Role.Name");
-            ModelState.Remove("Role.Users");
-            ModelState.Remove("Role.Description");
-            ModelState.Remove("UserId");
+            SetModel();
             if (ModelState.IsValid)
             {
-                if (HttpContext.Session.IsAvailable)
+                if (user.UserId != null)
+                {
+                    skilledForceDB.User.Update(user);
+                    skilledForceDB.SaveChanges();
+                    ViewBag.success = true;
+                    return GetRecruiters();
+                }
+                int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
+                if (userExists == 0)
+                {
+                    skilledForceDB.User.Add(user);
+                    skilledForceDB.SaveChanges();
+                    ViewBag.SuccessMessage = "Saved User Successfully";
+                    return GetRecruiters();
+                }
+                ViewBag.Error = "User Email exists";
+            }
+            return Register();
+        }
+
+        [HttpPost]
+        public IActionResult CompanyRegister(User user)
+        {
+            SetModel();
+            if (ModelState.IsValid)
+            {
+                if (HttpContext.Session.GetString("UserId") != null)
                 {
                     user.UserId = HttpContext.Session.GetString("UserId").ToString();
                     skilledForceDB.User.Update(user);
                     skilledForceDB.SaveChanges();
-                    UpdateUserData(user);
+                    UpdateSession(user);
                     ViewBag.success = true;
                     return RedirectToAction("Index", "Home");
                 }
@@ -146,6 +170,22 @@ namespace Skilled_Force_VS_22.Controllers
                 ViewBag.Error = "User Email exists";
             }
             return CompanyRegister();
+        }
+
+        private void SetModel()
+        {
+            ModelState.Remove("Jobs");
+            ModelState.Remove("Role");
+            ModelState.Remove("Company.UserId");
+            ModelState.Remove("Company.CompanyId");
+            ModelState.Remove("Company.Name");
+            ModelState.Remove("Company.User");
+            ModelState.Remove("Company.Description");
+            ModelState.Remove("Company.CompanyReviews");
+            ModelState.Remove("CompanyReviews");
+            ModelState.Remove("Company");
+            ModelState.Remove("CompanyId");
+            ModelState.Remove("UserId");
         }
 
         private User getUserIfExists(string Email, string Password)
@@ -163,6 +203,14 @@ namespace Skilled_Force_VS_22.Controllers
             return View("RegistrationForm", user);
         }
 
+        public IActionResult EditRecruiterDetails(string userId)
+        {
+            User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
+            ViewBag.edit = true;
+            LoadMetaData();
+            return View("RecruiterRegistrationForm", user);
+        }
+
         public void LoadMetaData()
         {
             ViewBag.Gender = new List<SelectListItem>() {
@@ -173,25 +221,36 @@ namespace Skilled_Force_VS_22.Controllers
             };
         }
 
-        public void UpdateUserData(User user)
+        public void UpdateSession(User user)
         {
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("Email", user.Email);
             HttpContext.Session.SetString("FirstName", user.FirstName);
             HttpContext.Session.SetString("RoleId", user.RoleId);
+            if(user.CompanyId != null)
+            {
+                HttpContext.Session.SetString("CompanyId", user.CompanyId);
+            }
             TempData["UserId"] = user.UserId.ToString();
             TempData["Email"] = user.Email;
             TempData["FirstName"] = user.FirstName;
             TempData["RoleId"] = user.RoleId;
         }
 
-        public List<User> Users()
+        public IActionResult GetRecruiters()
         {
-            List<User> users = skilledForceDB.User.Where(u => u.RoleId.Equals(2)).ToList();
-            return users;
+            List<User> users = skilledForceDB.User.Where(u => u.RoleId.Equals("2")).ToList();
+            ViewBag.users = users;
+            return View("GetRecruiters");
         }
 
-        
+        public IActionResult DeleteRecruiter(string userId)
+        {
+            User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
+            skilledForceDB.User.Remove(user);
+            skilledForceDB.SaveChanges();
+            return GetRecruiters();
+        }
 
     }
 }
