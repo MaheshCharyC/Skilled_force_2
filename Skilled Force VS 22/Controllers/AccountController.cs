@@ -46,7 +46,7 @@ namespace Skilled_Force_VS_22.Controllers
             if (exisitngUser != null)
             {
                 UpdateUserData(exisitngUser);
-                ViewData["success"] = true;
+                ViewBag.success = true;
                 return RedirectToAction("Index", "Home");
             }
             ViewData["success"] = false;
@@ -56,8 +56,11 @@ namespace Skilled_Force_VS_22.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            if (TempData.Peek("UserId") != null)
+            if (HttpContext.Session.GetString("UserId") != null)
+            {
+                HttpContext.Session.Clear();
                 TempData.Clear();
+            }                
             return LoginForm();
         }
 
@@ -89,33 +92,60 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
-                if (TempData.ContainsKey("UserId"))
+                if (HttpContext.Session.IsAvailable)
                 {
-                    user.UserId = TempData.Peek("UserId").ToString();
+                    user.UserId = HttpContext.Session.GetString("UserId").ToString();
                     skilledForceDB.User.Update(user);
                     skilledForceDB.SaveChanges();
                     UpdateUserData(user);
                     ViewBag.success = true;
                     return RedirectToAction("Index", "Home");
                 }
-                User exisitngUser = skilledForceDB.User.Where(u => u.Email == user.Email).FirstOrDefault();
-                if (exisitngUser == null)
+                int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
+                if (userExists == 0)
                 {
                     skilledForceDB.User.Add(user);
                     skilledForceDB.SaveChanges();
-                    TempData["SuccessMessage"] = "Saved User Successfully";
+                    ViewBag.SuccessMessage = "Saved User Successfully";
+                    return LoginForm();
                 }
-                else
-                {
-                    TempData["Error"] = "User Email exists";
-                    return Register();
-                }
+                ViewBag.Error = "User Email exists";
             }
-            else
+            return Register();
+        }
+
+        [HttpPost]
+        public IActionResult CompanyRegister(User user)
+        {
+            ModelState.Remove("Jobs");
+            ModelState.Remove("Role");
+            ModelState.Remove("Role.RoleId");
+            ModelState.Remove("Role.Name");
+            ModelState.Remove("Role.Users");
+            ModelState.Remove("Role.Description");
+            ModelState.Remove("UserId");
+            if (ModelState.IsValid)
             {
-                return Register();
+                if (HttpContext.Session.IsAvailable)
+                {
+                    user.UserId = HttpContext.Session.GetString("UserId").ToString();
+                    skilledForceDB.User.Update(user);
+                    skilledForceDB.SaveChanges();
+                    UpdateUserData(user);
+                    ViewBag.success = true;
+                    return RedirectToAction("Index", "Home");
+                }
+                int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
+                if (userExists == 0)
+                {
+                    skilledForceDB.User.Add(user);
+                    skilledForceDB.SaveChanges();
+                    ViewBag.SuccessMessage = "Saved User Successfully";
+                    return LoginForm();
+                }
+                ViewBag.Error = "User Email exists";
             }
-            return LoginForm();
+            return CompanyRegister();
         }
 
         private User getUserIfExists(string Email, string Password)
@@ -127,7 +157,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult EditDetails()
         {
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(TempData.Peek("UserId").ToString())).FirstOrDefault();
+            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
             ViewBag.edit = true;
             LoadMetaData();
             return View("RegistrationForm", user);
@@ -135,11 +165,6 @@ namespace Skilled_Force_VS_22.Controllers
 
         public void LoadMetaData()
         {
-            List<SelectListItem> roles = new List<SelectListItem>();
-            roles.Add(new SelectListItem { Value = "", Text = "Select Role" });
-            foreach (Role role in GetRoles())
-                roles.Add(new SelectListItem { Value = role.RoleId, Text = role.Name });
-            ViewBag.roles = roles;
             ViewBag.Gender = new List<SelectListItem>() {
                 new SelectListItem { Value = "", Text = ""},
                 new SelectListItem { Value = "Male", Text = "Male"},

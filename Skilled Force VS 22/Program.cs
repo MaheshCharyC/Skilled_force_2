@@ -45,6 +45,9 @@ app.UseEndpoints(endpoints =>
        pattern: "{controller=Account}/{action=RegistrationForm}");
     endpoints.MapControllerRoute(
        name: "default",
+       pattern: "{controller=Account}/{action=CompanyRegistrationForm}");
+    endpoints.MapControllerRoute(
+       name: "default",
        pattern: "{controller=Job}/{action=PostJob}");
     endpoints.MapControllerRoute(
        name: "default",
