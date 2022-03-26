@@ -5,7 +5,7 @@
 @model Job
 
 <div class="text-center">
-    <h5 class="display-4">Hello @TempData.Peek("FirstName").<br> Welcome to Skilled Force</h5>
+    <h5 class="display-4">Hello @Context.Session.GetString("FirstName").<br> Welcome to Skilled Force</h5>
 
 </div>
 
@@ -80,11 +80,11 @@
                                 {
                                     @Html.ActionLink("Cancel application", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-light" } )
                                 }
-                                else if (TempData.Peek("RoleId").Equals("1"))
+                                else if (@Context.Session.GetString("RoleId").Equals("1"))
                                 {
                                     @Html.ActionLink("Apply now", "JobApply", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-light" } )
                                 }
-                                else if (TempData.Peek("RoleId").Equals("2") || TempData.Peek("RoleId").Equals("3"))
+                                else if (@Context.Session.GetString("RoleId").Equals("2") || @Context.Session.GetString("RoleId").Equals("3"))
                                 {
                                     @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )
                                     @Html.ActionLink("Delete", "JobDelete", "Job", new { @job.JobId }, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )

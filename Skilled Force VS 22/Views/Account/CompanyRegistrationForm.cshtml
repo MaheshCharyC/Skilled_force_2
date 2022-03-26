@@ -45,7 +45,17 @@
                    @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.Phone)
                    @Html.TextBoxFor(m => m.Phone, null, new { @class = "form-control form-control-lg" })
-                </div>     
+                </div>                
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Company.Name, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Company.Name)
+                   @Html.TextBoxFor(m => m.Company.Name, null, new { @class = "form-control form-control-lg" })
+                </div>
+                <div class="form-outline mb-4">
+                   @Html.ValidationMessageFor(m => m.Company.Description, "", new { @class = "text-danger" })
+                   @Html.LabelFor(m => m.Company.Description)
+                   @Html.TextAreaFor(m => m.Company.Description, null, new { @class = "form-control form-control-lg" })
+                </div>
                 <div class="form-outline mb-4">
                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                    @Html.LabelFor(m => m.Password)
