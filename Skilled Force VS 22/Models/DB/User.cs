@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace Skilled_Force_VS_22.Models
+namespace Skilled_Force_VS_22.Models.DB
 {
     public class User
     {
@@ -63,5 +63,7 @@ namespace Skilled_Force_VS_22.Models
         public virtual IList<Job> Jobs { get; set; }
 
         public virtual Company Company { get; set; }
+
+        public virtual IList<CompanyReview> CompanyReviews { get; set; }
     }
 }

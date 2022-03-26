@@ -21,7 +21,11 @@ namespace Skilled_Force_VS_22.Models.DB
         [Required]
         public string Description { get; set; }
 
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
+        public virtual IList<CompanyReview> CompanyReviews { get; set; }
+
 
     }
 }

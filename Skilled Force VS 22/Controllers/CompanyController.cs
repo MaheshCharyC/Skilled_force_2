@@ -1,83 +1,74 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Skilled_Force_VS_22.Manager;
+using Skilled_Force_VS_22.Models.DB;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Skilled_Force_VS_22.Controllers
 {
     public class CompanyController : Controller
     {
-        // GET: Company
-        public ActionResult Index()
+        private readonly ILogger<HomeController> _logger;
+        private readonly SkilledForceDB skilledForceDB;
+
+        public CompanyController(ILogger<HomeController> logger, SkilledForceDB skilledForceDB)
         {
-            return View();
+            _logger = logger;
+            this.skilledForceDB = skilledForceDB;
         }
 
-        // GET: Company/Details/5
-        public ActionResult Details(int id)
+
+        [HttpGet]
+        public IActionResult GetCompanyDetails(String CompanyId)
         {
-            return View();
+            Company? company;
+            if (CompanyId != null)
+            {
+                company = skilledForceDB.Company
+                    .Include(c => c.CompanyReviews)
+                    .ThenInclude(c => c.User)
+                    .Where(c => c.CompanyId == CompanyId).FirstOrDefault();
+            }
+            else
+            {
+                company = skilledForceDB.Company
+                   .Include(c => c.CompanyReviews)
+                   .ThenInclude(c => c.User)
+                   .Where(c => c.UserId.Equals(TempData.Peek("UserId"))).FirstOrDefault();
+            }
+
+
+            return View("CompanyDetails", company);
         }
 
-        // GET: Company/Create
-        public ActionResult Create()
+        [HttpGet]
+        public IActionResult EditCompanyDetails(String companyId)
         {
-            return View();
+            Company? company = skilledForceDB.Company
+                .Where(c => c.CompanyId == companyId).FirstOrDefault();
+
+            return View("CompanyDetailsEdit", company);
         }
 
-        // POST: Company/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult EditCompanyDetails(Company company)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            Company? existingCompany = skilledForceDB.Company
+                                            .Where(c => c.CompanyId == company.CompanyId).FirstOrDefault();
+
+            existingCompany.Description = company.Description;
+            existingCompany.Name = company.Name;
+
+            skilledForceDB.Company.Update(existingCompany);
+            skilledForceDB.SaveChanges();
+
+
+            return RedirectToAction("GetCompanyDetails", "Company", new { company.CompanyId });
         }
 
-        // GET: Company/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: Company/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: Company/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: Company/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
