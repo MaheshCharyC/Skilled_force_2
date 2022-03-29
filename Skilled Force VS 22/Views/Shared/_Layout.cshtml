@@ -35,9 +35,6 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Job" asp-action="JobPostForm">Post Job</a>
                                 </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">@Context.Session.GetString("FirstName")</a>
-                            </li>
                              @if (@Context.Session.GetString("RoleId") != null && @Context.Session.GetString("RoleId").Equals("3"))
                             {
                                 <li class="nav-item">
@@ -47,6 +44,9 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="GetCompanyDetails">Company Details</a>
                                 </li>
                             }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditDetails">Profile</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="navbar-right">

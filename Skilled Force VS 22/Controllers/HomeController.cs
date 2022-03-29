@@ -21,7 +21,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult Index(string keywords, string location, string jobType)
         {
-            if (TempData.Peek("UserId") != null)
+            if (HttpContext.Session.IsAvailable && HttpContext.Session.Keys.Contains("UserId") && HttpContext.Session.GetString("UserId") != null)
             {
                 loadMetaInfo();
                 ViewBag.jobs = GetList(keywords, location, jobType);
@@ -44,11 +44,15 @@ namespace Skilled_Force_VS_22.Controllers
         }
         public List<Job> GetList(string keywords, string location, string jobtype)
         {
+            string userId = HttpContext.Session.GetString("UserId").ToString();
+            string roleId = HttpContext.Session.GetString("RoleId").ToString();
             List<Job>? jobs = null;
             IQueryable<Job>? sqlData = null;
-            if (TempData.Peek("RoleId").Equals("2"))
-                sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == TempData.Peek("UserId").ToString());
-            else 
+            if (roleId.Equals("2"))
+                sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == userId);
+            else if (roleId.Equals("3"))
+                sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
+            else
                 sqlData = skilledForceDB.Job.Include(job => job.Users);
 
             if (keywords != null && keywords != "")
@@ -60,9 +64,9 @@ namespace Skilled_Force_VS_22.Controllers
                 sqlData = sqlData.Where(j => j.JobType.Contains(jobtype));
 
             jobs = sqlData.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt).ToList();
-            if (TempData.Peek("RoleId").Equals("1"))
+            if (roleId.Equals("1"))
             {
-                User user = skilledForceDB.User.Where(u => u.UserId.Equals(TempData.Peek("UserId").ToString())).FirstOrDefault(); ;
+                User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault(); ;
                 jobs.ForEach(job => job.IsApplied = job.Users.Contains(user));
             }
 

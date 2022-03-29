@@ -9,6 +9,9 @@
 
 
 <div class="container">
+    <div class="container text-center pt-3">
+        <h2>Manage Company Users</h2>
+    </div>
     <div class="row">
         <div class="col-lg-10 mx-auto">
             <div class="career-search mb-60">
@@ -25,8 +28,8 @@
                                 Search
                             </button>
                         </div>
-                        <div class="col-md-6 col-lg-3 my-3">
-                            @Html.ActionLink("Add User", "RecruiterRegister", "Account", null, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )
+                        <div class="col-md-6 col-lg-6 my-3">
+                            @Html.ActionLink("Add User", "RecruiterRegister", "Account", null, new { @class = "btn btn-lg btn-block btn-light btn-custom", @style="float: right;"} )
                         </div>
                     </div>
                 }
@@ -38,17 +41,17 @@
                         <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
                             <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
                                 <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
-                                    FD
+                                    @user.FirstName.Substring(0,1).ToUpper()@user.LastName.Substring(0,1).ToUpper()
                                 </div>
                                 <div class="job-content">
                                     <h5 class="text-center text-md-left">@user.FullName</h5>
                                     <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
                                         <li class="mr-md-4">
                                             <i class=" mr-2"></i> @user.Email
-                                        </li>
+                                        </li>  &emsp;
                                         <li class="mr-md-4">
                                             <i class="mr-2"></i> @user.Phone
-                                        </li>
+                                        </li>  &emsp;
                                         <li class="mr-md-4">
                                             <i class="mr-2"></i> @user.Gender
                                         </li>
@@ -56,8 +59,8 @@
                                 </div>
                             </div>
                             <div class="job-right my-4 flex-shrink-0">
-                                @Html.ActionLink("Edit", "EditRecruiterDetails", "Account", new { @user.UserId }, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )
-                                @Html.ActionLink("Delete", "DeleteRecruiter", "Account", new { @user.UserId }, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )
+                                @Html.ActionLink("Edit", "EditRecruiterDetails", "Account", new { @user.UserId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                @Html.ActionLink("Delete", "DeleteRecruiter", "Account", new { @user.UserId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                             </div>
                         </div>
                     }

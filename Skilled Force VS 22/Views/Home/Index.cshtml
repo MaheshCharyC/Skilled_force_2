@@ -58,7 +58,13 @@
                         <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
                             <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
                                 <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
-                                    FD
+                                    @if(@job.Title.Split(" ").Count() > 1)
+                                    {
+                                        @job.Title.Split(" ")[0].Substring(0,1).ToUpper()@job.Title.Split(" ")[1].Substring(0,1).ToUpper()
+                                    } else
+                                    {
+                                        @job.Title.Substring(0,2).ToUpper()
+                                    }
                                 </div>
                                 <div class="job-content">
                                     <h5 class="text-center text-md-left">@job.Title</h5>
@@ -78,16 +84,16 @@
                             <div class="job-right my-4 flex-shrink-0">
                                 @if (job.IsApplied)
                                 {
-                                    @Html.ActionLink("Cancel application", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-light" } )
+                                    @Html.ActionLink("Cancel application", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("1"))
                                 {
-                                    @Html.ActionLink("Apply now", "JobApply", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-light" } )
+                                    @Html.ActionLink("Apply now", "JobApply", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("2") || @Context.Session.GetString("RoleId").Equals("3"))
                                 {
-                                    @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )
-                                    @Html.ActionLink("Delete", "JobDelete", "Job", new { @job.JobId }, new { @class = "btn d-block w-50 d-sm-inline-block btn-light" } )
+                                    @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @Html.ActionLink("Delete", "JobDelete", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                                 }
                             </div>
                         </div>

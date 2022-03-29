@@ -47,6 +47,10 @@ namespace Skilled_Force_VS_22.Controllers
             {
                 UpdateSession(exisitngUser);
                 ViewBag.success = true;
+                if(exisitngUser.RoleId.Equals("3"))
+                {
+                    return RedirectToAction("GetRecruiters", "Account");
+                }
                 return RedirectToAction("Index", "Home");
             }
             ViewData["success"] = false;
@@ -141,7 +145,7 @@ namespace Skilled_Force_VS_22.Controllers
                 }
                 ViewBag.Error = "User Email exists";
             }
-            return Register();
+            return RecruiterRegister();
         }
 
         [HttpPost]
@@ -163,6 +167,7 @@ namespace Skilled_Force_VS_22.Controllers
                 if (userExists == 0)
                 {
                     skilledForceDB.User.Add(user);
+                    user.CompanyId = user.Company.CompanyId.ToString();
                     skilledForceDB.SaveChanges();
                     ViewBag.SuccessMessage = "Saved User Successfully";
                     return LoginForm();
@@ -214,7 +219,7 @@ namespace Skilled_Force_VS_22.Controllers
         public void LoadMetaData()
         {
             ViewBag.Gender = new List<SelectListItem>() {
-                new SelectListItem { Value = "", Text = ""},
+                new SelectListItem { Value = "", Text = "Select Gender"},
                 new SelectListItem { Value = "Male", Text = "Male"},
                 new SelectListItem { Value = "Female", Text = "Female"},
                 new SelectListItem { Value = "Other", Text = "Other"},
@@ -239,7 +244,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult GetRecruiters()
         {
-            List<User> users = skilledForceDB.User.Where(u => u.RoleId.Equals("2")).ToList();
+            List<User> users = skilledForceDB.User.Where(u => u.RoleId.Equals("2") && u.CompanyId.Equals(HttpContext.Session.GetString("CompanyId"))).ToList();
             ViewBag.users = users;
             return View("GetRecruiters");
         }
