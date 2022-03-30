@@ -33,13 +33,16 @@ namespace Skilled_Force_VS_22.Controllers
                 new SelectListItem { Value = "JavaDeveloper", Text = "Java Developer"},
                 new SelectListItem { Value = "WebDeveloper", Text = "Web Developer"},
                 new SelectListItem { Value = "FrontEndDeveloper", Text = "FrontEnd Developer"},
-                new SelectListItem { Value = "Tester", Text = "Tester"}
+                new SelectListItem { Value = "Tester", Text = "Tester"},
+                new SelectListItem { Value = "Other", Text = "Other"}
             };
             ViewBag.EmploymentType = new List<SelectListItem>()
             {
                 new SelectListItem { Value = "", Text = "Select"},
-                new SelectListItem { Value = "FullTime", Text = "Full Time"},
-                new SelectListItem { Value = "PartTime", Text = "Part Time"}
+                new SelectListItem { Value = "FullTime", Text = "FullTime"},
+                new SelectListItem { Value = "PartTime", Text = "PartTime"},
+                new SelectListItem { Value = "FullTime - Remote", Text = "FullTime - Remote"},
+                new SelectListItem { Value = "PartTime - Remote", Text = "PartTime - Remote"}
             };
         }
 

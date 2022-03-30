@@ -73,7 +73,7 @@
 
     <link href="@Url.Content("~/css/starform.css")" rel="stylesheet" type="text/css" />
 
-    @if (TempData.ContainsKey("UserId"))
+    @if (@Context.Session.GetString("UserId") != null)
     {
         <div class="row">
             <div class="col-12">

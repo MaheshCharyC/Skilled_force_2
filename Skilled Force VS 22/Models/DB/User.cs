@@ -44,7 +44,7 @@ namespace Skilled_Force_VS_22.Models.DB
 
         public string RoleId { get; set; }
 
-        public string CompanyId { get; set; }
+        public string? CompanyId { get; set; }
 
         [Required(ErrorMessage = "Please enter password")]
         [Column("Password")]

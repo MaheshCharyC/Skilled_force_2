@@ -7,6 +7,7 @@ using Skilled_Force_VS_22.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Skilled_Force_VS_22.Controllers
 {
@@ -124,24 +125,29 @@ namespace Skilled_Force_VS_22.Controllers
 
         [HttpPost]
         public IActionResult RecruiterRegister(User user)
-        {
+        {            
             SetModel();
             if (ModelState.IsValid)
             {
                 if (user.UserId != null)
                 {
                     skilledForceDB.User.Update(user);
-                    skilledForceDB.SaveChanges();
                     ViewBag.success = true;
-                    return GetRecruiters();
                 }
                 int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
                 if (userExists == 0)
                 {
                     skilledForceDB.User.Add(user);
+                    ViewBag.success = true;
+                }
+                if (ViewBag.success)
+                {
                     skilledForceDB.SaveChanges();
-                    ViewBag.SuccessMessage = "Saved User Successfully";
-                    return GetRecruiters();
+                    if (HttpContext.Session.GetString("RoleId").Equals("2")) {
+                        UpdateSession(user);
+                        return RedirectToAction("Index", "Home");
+                    }  else
+                       return GetRecruiters();
                 }
                 ViewBag.Error = "User Email exists";
             }
@@ -201,11 +207,22 @@ namespace Skilled_Force_VS_22.Controllers
         public List<Role> GetRoles() => skilledForceDB.Role.ToList();
 
         public IActionResult EditDetails()
-        {
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
+        {            
             ViewBag.edit = true;
             LoadMetaData();
-            return View("RegistrationForm", user);
+            if (HttpContext.Session.GetString("RoleId").Equals("3"))
+            {
+                User user = skilledForceDB.User.Include(u => u.Company).Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
+                return View("CompanyRegistrationForm", user);
+            } else if (HttpContext.Session.GetString("RoleId").Equals("2"))
+            {
+                User user = skilledForceDB.User.Include(u => u.Company).Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
+                return View("RecruiterRegistrationForm", user);
+            } else
+            {
+                User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
+                return View("RegistrationForm", user);
+            }            
         }
 
         public IActionResult EditRecruiterDetails(string userId)
@@ -236,10 +253,6 @@ namespace Skilled_Force_VS_22.Controllers
             {
                 HttpContext.Session.SetString("CompanyId", user.CompanyId);
             }
-            TempData["UserId"] = user.UserId.ToString();
-            TempData["Email"] = user.Email;
-            TempData["FirstName"] = user.FirstName;
-            TempData["RoleId"] = user.RoleId;
         }
 
         public IActionResult GetRecruiters()
