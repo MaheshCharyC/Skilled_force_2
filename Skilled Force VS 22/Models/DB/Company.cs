@@ -26,6 +26,9 @@ namespace Skilled_Force_VS_22.Models.DB
 
         public virtual IList<CompanyReview> CompanyReviews { get; set; }
 
+        //public virtual IList<Job> Jobs { get; set; }
+
+
 
     }
 }
