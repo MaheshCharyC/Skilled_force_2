@@ -12,7 +12,6 @@
                     @using (Html.BeginForm("EditCompanyDetails", "Company", FormMethod.Post))
                     {
                         @Html.HiddenFor(m => m.CompanyId)
-
                         <div class="form-outline mb-4">
                             <label class="form-label" for="typeEmailX-2">Company Name</label>
                             @Html.TextBoxFor(m => m.Name, null, new { @class = "form-control form-control-lg", @Value = Model.Name})

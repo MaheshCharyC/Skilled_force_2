@@ -60,9 +60,11 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("CreatedAt");
             ModelState.Remove("CreatedBy");
             ModelState.Remove("UpdatedBy");
+            ModelState.Remove("Company");
             if (ModelState.IsValid)
             {
-                if(job.JobId == null)
+                job.CompanyId = HttpContext.Session.GetString("CompanyId").ToString();
+                if (job.JobId == null)
                 {
                     job.CreatedBy = HttpContext.Session.GetString("UserId").ToString();
                     job.CreatedAt = DateTime.Now;
@@ -125,6 +127,7 @@ namespace Skilled_Force_VS_22.Controllers
             job.IsApplied = job.Users.Contains(user);
             Company company = skilledForceDB.Company.Where(c => c.CompanyId.Equals(job.CompanyId)).FirstOrDefault();
             ViewData["companyName"] = company.Name;
+            ViewData["companyDesc"] = company.Description;
             return View("JobDetails", job);
         }
     }

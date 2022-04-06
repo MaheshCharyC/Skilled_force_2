@@ -1,125 +1,129 @@
 ﻿@model Company
 
 
-<script src="~/js/rating.js" asp-append-version="true"></script>
-<link href="@Url.Content("~/css/rating.css")" rel="stylesheet" type="text/css" />
-
-
-<div class="container shadow min-vh-100 py-2" style="padding:50px">
-
-    <div class="row">
-
-        @{
-            int totalRatingCount = Model.CompanyReviews.Count;
-            int totalRating = 0;
-            if(Model.CompanyReviews != null) {
-                totalRating = (int)MathF.Round((float)Model.CompanyReviews.Select(c => c.Rating).DefaultIfEmpty().Average());
-            }
-        }
-        <h2 class="col-12 font-weight-light">
-            @Model.Name
-            @if (@Context.Session.GetString("UserId") != null && Model.UserId == @Context.Session.GetString("UserId").ToString())
-            {
-                <a href="@Url.Action("EditCompanyDetails", "Company", new { @Model.CompanyId })">
-                    <i class='fa fa-edit'></i> Edit
-                </a>
-            }
-        </h2>
-
-
-        <div class="small-ratings">
-            <i>(@totalRatingCount Reviews)</i>
-            @for (var i = 1; i <= 5; i++)
-            {
-                if (i <= totalRating)
-                {
-                    <i class="fa fa-star rating-color"></i>
+@{ ViewData["Title"] = "Skilled Force Job post page"; }
+  <div class="container py-5 h-100">
+    <link href="@Url.Content("~/css/starform.css")" rel="stylesheet" type="text/css" />
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="col-sm-12">
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <div>
+                @{
+                    int totalRatingCount = Model.CompanyReviews.Count;
+                    int totalRating = 0;
+                    if(Model.CompanyReviews != null) {
+                        totalRating = (int)MathF.Round((float)Model.CompanyReviews.Select(c => c.Rating).DefaultIfEmpty().Average());
+                    }
                 }
-                else
+             <h3 class="mb-5">@Model.Name</h3>
+            </div>
+            <div class="small-ratings">
+                <p>(@totalRatingCount Reviews)</p>
+                @for (var i = 1; i <= 5; i++)
                 {
-                    <i class="fa fa-star"></i>
-                }
-            }
-        </div>
-        <p class="col-12">
-            @Model.Description
-        </p>
-    </div>
-
-
-    @foreach (CompanyReview review in Model.CompanyReviews.OrderByDescending(r => r.Time))
-    {
-        <div class="card" style="padding:50px;margin:50px">
-            <div class="col-12"> <b>@review.User.FirstName</b><i class="pull-right">@review.Time</i></div>
-            <div class="col-12">
-                <div class="ratings">
-                    @for (var i = 1; i <= 5; i++)
+                    if (i <= totalRating)
                     {
-                        if (i <= review.Rating)
+                        <i class="fa fa-star rating-color"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+                }
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="text-left" style="text-align:left">
+                            <h5>Who we are</h5>
+                            <p class="pb-3">@Model.Description</p>
+                        </div>
+                        @foreach (CompanyReview review in Model.CompanyReviews.OrderByDescending(r => r.Time))
                         {
-                            <i class="fa fa-star rating-color"></i>
+                            <div class="card" style="padding:10px;margin:10px;text-align:left">
+                                <div class="col-12"> <b>@review.User.FirstName</b><p class="pull-right">@review.Time</p></div>
+                                <div class="col-12">
+                                    <div class="ratings">
+                                        @for (var i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= review.Rating)
+                                            {
+                                                <i class="fa fa-star rating-color"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-star"></i>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="col-12"  style="text-align:left">@review.comment</div>
+                                </div>
+                            </div>
+                         }
+                    </div>
+                    <div>
+                        @if (@Context.Session.GetString("UserId") != null)
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    @using (Html.BeginForm("AddReview", "CompanyReview", FormMethod.Post))
+                                    {
+                                        <input type="hidden" value="@Model.CompanyId" name="CompanyId" />
+
+                                        <div class="stars">
+                                            <input class="star star-5" id="star-5" type="radio" name="Rating" value="5" /> <label class="star star-5" for="star-5"></label>
+                                            <input class="star star-4" id="star-4" type="radio" name="Rating" value="4" /> <label class="star star-4" for="star-4"></label>
+                                            <input class="star star-3" id="star-3" type="radio" name="Rating" value="3" /> <label class="star star-3" for="star-3"></label>
+                                            <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" /> <label class="star star-2" for="star-2"></label>
+                                            <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" /> <label class="star star-1" for="star-1"></label>
+                                        </div>
+
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="typeEmailX-2">Your Review</label>
+                                            <textarea name="comment" class="form-control form-control-lg"></textarea>
+                                        </div>
+
+                                        <div class="row">
+                                            <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit">Add Review</button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         }
                         else
                         {
-                            <i class="fa fa-star"></i>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        @Html.ActionLink("Login", "LoginForm", "Account",null,new {@class="btn btn-primary"})
+                                    </div>
+                                </div>
+                            </div>
                         }
-                    }
-                </div>
-
-                <div class="col-12">@review.comment</div>
-            </div>
-        </div>
-    }
-
-    <link href="@Url.Content("~/css/starform.css")" rel="stylesheet" type="text/css" />
-
-    @if (@Context.Session.GetString("UserId") != null)
-    {
-        <div class="row">
-            <div class="col-12">
-                @using (Html.BeginForm("AddReview", "CompanyReview", FormMethod.Post))
-                {
-                    <input type="hidden" value="@Model.CompanyId" name="CompanyId" />
-
-                    <div class="stars">
-                        <input class="star star-5" id="star-5" type="radio" name="Rating" value="5" /> <label class="star star-5" for="star-5"></label>
-                        <input class="star star-4" id="star-4" type="radio" name="Rating" value="4" /> <label class="star star-4" for="star-4"></label>
-                        <input class="star star-3" id="star-3" type="radio" name="Rating" value="3" /> <label class="star star-3" for="star-3"></label>
-                        <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" /> <label class="star star-2" for="star-2"></label>
-                        <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" /> <label class="star star-1" for="star-1"></label>
                     </div>
-
-
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="typeEmailX-2">Review</label>
-                        <textarea name="comment" class="form-control form-control-lg"></textarea>
-                    </div>
-
-                    <div class="row">
-                        <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit">Add Review</button>
-                    </div>
-                    <div class="row">
-                        <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="button" onclick="goPrev()" >Cancel</button>
-                    </div>
-                }
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    @Html.ActionLink("Login", "LoginForm", "Account",null,new {@class="btn btn-primary"})
                 </div>
             </div>
+          </div>
         </div>
-    }
-
-</div>
+      </div>
+    </div>
+  </div>
 <script>
     function goPrev()
     {
         window.history.back();
     }
 </script>
+<style>
+.fa-star:before {
+    content: "\f005";
+    color:lightgray;
+}
+.fa-star.rating-color:before {
+    content: "\f005";
+    color:gold;
+}
+</style>

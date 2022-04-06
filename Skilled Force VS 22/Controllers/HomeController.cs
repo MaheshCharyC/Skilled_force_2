@@ -52,11 +52,12 @@ namespace Skilled_Force_VS_22.Controllers
             if (roleId.Equals("1"))
                 sqlQuary = skilledForceDB.Job.Include(job => job.Company);
             else if (roleId.Equals("2"))
-                sqlQuary = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == userId);
+                sqlQuary = skilledForceDB.Job.Include(job => job.Company)
+                    .Include(job => job.Users).Where(j => j.CreatedBy == userId);
             else if (roleId.Equals("3"))
             {
                 sqlQuary = skilledForceDB.Job
-                    .Include(job => job.Users)
+                    .Include(job => job.Users).Include(job => job.Company)
                     .Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
             }
 

@@ -8,35 +8,35 @@
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
           <div class="card-body p-5 text-center">
             <div>
-             <h3 class="mb-5">Job information</h3>    
-             @Html.ActionLink(ViewData["companyName"].ToString(), "GetCompanyDetails", "Company", new { @Model.CompanyId }, new { @class = "btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" } )  
+             <h3 class="mb-5">@Model.Title for    
+             @Html.ActionLink(ViewData["companyName"].ToString(), "GetCompanyDetails", "Company", new { @Model.CompanyId }, new { @class = "" } )  
+             </h3>
             </div>
-            <div class="form-outline mb-4"> 
-                @Html.LabelFor(m => m.Title, new {@class="form-label"})
-                @Html.TextBoxFor(m => m.Title, null, new { @class = "form-control form-control-lg", @readonly="readonly"})
-            </div>
-            <div class="row">
-                <div class="form-outline mb-4 col-sm-6">
-                    @Html.LabelFor(m => m.JobType)
-                    @Html.TextBoxFor(m => m.JobType, null, new { id = "JobType", @class = "form-control form-control-lg", @readonly="readonly" })
-                </div>
-                    <div class="form-outline mb-4 col-sm-6">
-                    @Html.LabelFor(m => m.EmploymentType)
-                    @Html.TextBoxFor(m => m.EmploymentType, null, new { id = "EmploymentType", @class = "form-control form-control-lg", @readonly="readonly" })
-                </div>
-            </div>
-            <div class="form-outline mb-4">
-                @Html.LabelFor(m => m.Description)
-                @Html.TextAreaFor(m => m.Description, 10, 10, new { @class= "form-control form-control-lg", @readonly="readonly" })
-            </div>          
+            
+            <div class="container">
                 <div class="row">
-                <div class="form-outline mb-4 col-sm-6">
-                    @Html.LabelFor(m => m.Location)
-                    @Html.TextBoxFor(m => m.Location, null, new { @class = "form-control form-control-lg", @readonly="readonly" })
-                </div>
-                <div class="form-outline mb-4 col-sm-6">
-                    @Html.LabelFor(m => m.Salary)
-                    @Html.TextBoxFor(m => m.Salary, new { @class = "form-control form-control-lg", @readonly="readonly" })
+                    <div class="col-md-8">
+                        <div class="text-left" style="text-align: left">
+                            <h5>Who we are</h5>
+                            <p class="pb-3">@ViewData["companyDesc"].ToString()</p>
+
+                            <h5>What we are looking for</h5>
+                            <p class="pb-3">@Model.Description</p>
+
+                            <h5>Position</h5>
+                            <p class="pb-3">@Model.JobType </p>
+
+                            <h5>Employment Type</h5>
+                            <p class="pb-3">@Model.EmploymentType </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:left" >
+                        <h5>Location</h5>
+                        <p class="pb-3">@Model.Location</p>
+
+                        <h5>Salary</h5>
+                        <p class="pb-3">@Model.Salary</p>
+                    </div>
                 </div>
             </div>
             <div class="row">

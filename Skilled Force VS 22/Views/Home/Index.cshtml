@@ -84,7 +84,7 @@
                                     </ul>
                                     @if (job.Company != null)
                                     {
-                                        @Html.ActionLink(@job.Company.Name, "GetCompanyDetails", "Company", new { @job.Company.CompanyId }, new { @class = "" } )
+                                        @Html.ActionLink("Company: " + @job.Company.Name, "GetCompanyDetails", "Company", new { @job.Company.CompanyId }, new { @class = "" } )
                                     }
                                 </div>
                             </div>
