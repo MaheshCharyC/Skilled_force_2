@@ -48,6 +48,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "Smith",
                         Gender = "Male",
                         RoleId = "1",
+                        CompanyId = "1",
                         Phone = "4989895454"
                     },
                     new User
@@ -58,6 +59,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "phill",
                         Gender = "Female",
                         RoleId = "2",
+                        CompanyId = "1",
                         Phone = "5989895454"
                     },
                     new User
@@ -68,6 +70,7 @@ namespace Skilled_Force_VS_22.Manager
                         LastName = "Admin L",
                         Gender = "Male",
                         RoleId = "3",
+                        CompanyId = "1",
                         Phone = "6989895454",
                         UserId = "3",
                     }
@@ -82,6 +85,7 @@ namespace Skilled_Force_VS_22.Manager
                         EmploymentType = "Full Time",
                         Salary = "5000$ - 10000$ PM",
                         Location = "New York",
+                        CompanyId = "1",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
                         CreatedBy = "2",
@@ -95,6 +99,7 @@ namespace Skilled_Force_VS_22.Manager
                         EmploymentType = "Part Time",
                         Salary = "10000$ - 15000$ PM",
                         Location = "Chicago",
+                        CompanyId = "1",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
                         CreatedBy = "2",

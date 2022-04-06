@@ -11,11 +11,14 @@
 
         @{
             int totalRatingCount = Model.CompanyReviews.Count;
-            int totalRating = (int)MathF.Round((float)Model.CompanyReviews.Select(c => c.Rating).Average());
+            int totalRating = 0;
+            if(Model.CompanyReviews != null) {
+                totalRating = (int)MathF.Round((float)Model.CompanyReviews.Select(c => c.Rating).DefaultIfEmpty().Average());
+            }
         }
         <h2 class="col-12 font-weight-light">
             @Model.Name
-            @if (TempData.ContainsKey("UserId") && Model.UserId == TempData.Peek("UserId").ToString())
+            @if (@Context.Session.GetString("UserId") != null && Model.UserId == @Context.Session.GetString("UserId").ToString())
             {
                 <a href="@Url.Action("EditCompanyDetails", "Company", new { @Model.CompanyId })">
                     <i class='fa fa-edit'></i> Edit
@@ -70,7 +73,7 @@
 
     <link href="@Url.Content("~/css/starform.css")" rel="stylesheet" type="text/css" />
 
-    @if (TempData.ContainsKey("UserId"))
+    @if (@Context.Session.GetString("UserId") != null)
     {
         <div class="row">
             <div class="col-12">

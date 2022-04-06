@@ -21,7 +21,7 @@ namespace Skilled_Force_VS_22.Controllers
         [HttpPost]
         public IActionResult AddReview(CompanyReview companyReview)
         {
-            companyReview.UserId = TempData.Peek("UserId").ToString();
+            companyReview.UserId = HttpContext.Session.GetString("UserId").ToString();
             companyReview.Time = DateTime.Now;
             skilledForceDB.CompanyReview.Add(companyReview);
             skilledForceDB.SaveChanges();

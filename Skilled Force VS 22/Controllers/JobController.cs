@@ -33,13 +33,16 @@ namespace Skilled_Force_VS_22.Controllers
                 new SelectListItem { Value = "JavaDeveloper", Text = "Java Developer"},
                 new SelectListItem { Value = "WebDeveloper", Text = "Web Developer"},
                 new SelectListItem { Value = "FrontEndDeveloper", Text = "FrontEnd Developer"},
-                new SelectListItem { Value = "Tester", Text = "Tester"}
+                new SelectListItem { Value = "Tester", Text = "Tester"},
+                new SelectListItem { Value = "Other", Text = "Other"}
             };
             ViewBag.EmploymentType = new List<SelectListItem>()
             {
                 new SelectListItem { Value = "", Text = "Select"},
-                new SelectListItem { Value = "FullTime", Text = "Full Time"},
-                new SelectListItem { Value = "PartTime", Text = "Part Time"}
+                new SelectListItem { Value = "FullTime", Text = "FullTime"},
+                new SelectListItem { Value = "PartTime", Text = "PartTime"},
+                new SelectListItem { Value = "FullTime - Remote", Text = "FullTime - Remote"},
+                new SelectListItem { Value = "PartTime - Remote", Text = "PartTime - Remote"}
             };
         }
 
@@ -61,14 +64,14 @@ namespace Skilled_Force_VS_22.Controllers
             {
                 if(job.JobId == null)
                 {
-                    job.CreatedBy = TempData.Peek("UserId").ToString();
+                    job.CreatedBy = HttpContext.Session.GetString("UserId").ToString();
                     job.CreatedAt = DateTime.Now;
-                    job.UpdatedBy = TempData.Peek("UserId").ToString();
+                    job.UpdatedBy = HttpContext.Session.GetString("UserId").ToString();
                     job.UpdatedAt = DateTime.Now;
                     skilledForceDB.Job.Add(job);
                 } else
                 {
-                    job.UpdatedBy = TempData.Peek("UserId").ToString();
+                    job.UpdatedBy = HttpContext.Session.GetString("UserId").ToString();
                     job.UpdatedAt = DateTime.Now;
                     skilledForceDB.Job.Update(job);
                 }
@@ -91,7 +94,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult JobApply(string jobId)
         {
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(TempData.Peek("UserId").ToString())).FirstOrDefault();
+            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
             Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
             job.Users = new List<User>() { user};
             skilledForceDB.SaveChanges();
@@ -101,7 +104,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult JobCancel(string jobId)
         {
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(TempData.Peek("UserId").ToString())).FirstOrDefault();
+            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
             Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
             job.Users.Remove(user);
             skilledForceDB.SaveChanges();

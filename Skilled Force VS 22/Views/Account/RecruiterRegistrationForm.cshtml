@@ -1,30 +1,30 @@
 ﻿@model User
 
-@{
-    Boolean isEdit = @Context.Session.GetString("UserId") != null;
-}
-@{ ViewData["Title"] = "Skilled Force Registration Page"; }
+
+@{ ViewData["Title"] = "Skilled Force User CreationPage"; }
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
           <div class="card-body p-5 text-center">
-            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            @using (Html.BeginForm("RecruiterRegister", "Account", FormMethod.Post))
             {
-                @if (isEdit)
+                @if (ViewBag.edit)
                 {
-                    <h3 class="mb-5">Edit personal information</h3>
+                    <h3 class="mb-5">Edit user information</h3>
+                    @Html.Hidden("UserId", Model.UserId)
                 }
                 else
                 {
-                    <h3 class="mb-5">Sign Up</h3>
+                    <h3 class="mb-5">Create User</h3>
                 } 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.Hidden("RoleId", 1)
+                @Html.Hidden("RoleId", 2)
+                @Html.Hidden("CompanyId", @Context.Session.GetString("CompanyId"))
                 <div class="form-outline mb-4">
                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     @Html.LabelFor(m => m.Email)
-                    @if (isEdit)
+                    @if (ViewBag.edit)
                        @Html.TextBoxFor(m => m.Email, null, new { @class = "form-control form-control-lg", @readonly="readonly"})
                     else 
                        @Html.TextBoxFor(m => m.Email, null, new { @class = "form-control form-control-lg" })
@@ -54,17 +54,15 @@
                    @Html.LabelFor(m => m.Password)
                    @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-lg" })
                 </div>
-                @if (isEdit)
+                @if (ViewBag.edit)
                 {
                     <button class="btn btn-primary btn-lg btn-block" type="submit">Submit Details</button>
-                    <button class="btn btn-primary btn-lg btn-block" type="button" onclick="goPrev()" >Cancel</button>
                 }
                 else
                 {
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
-                    <hr class="my-4">
-                    @Html.ActionLink("Sign In", "LoginForm", "Account")
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Add User</button>
                 }                 
+                <button class="btn btn-primary btn-lg btn-block" type="button" onclick="goPrev()" >Cancel</button>
             }
           </div>
         </div>
