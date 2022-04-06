@@ -54,7 +54,6 @@ namespace Skilled_Force_VS_22.Controllers
             else if (roleId.Equals("3"))
                 sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
 
-
             if (keywords != null && keywords != "")
                 sqlData = sqlData.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
                             j.EmploymentType.Contains(keywords) || j.Location.Contains(keywords) || j.JobType.Contains(keywords));
@@ -66,7 +65,7 @@ namespace Skilled_Force_VS_22.Controllers
             jobs = sqlData.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt).ToList();
             if (roleId.Equals("1"))
             {
-                User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault(); ;
+                User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
                 jobs.ForEach(job => job.IsApplied = job.Users.Contains(user));
             }
 

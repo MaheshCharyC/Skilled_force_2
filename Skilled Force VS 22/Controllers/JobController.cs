@@ -117,5 +117,15 @@ namespace Skilled_Force_VS_22.Controllers
             skilledForceDB.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult ViewJob(string jobId)
+        {
+            Job job = skilledForceDB.Job.Include(j => j.Users).Where(j => j.JobId == jobId).FirstOrDefault();
+            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
+            job.IsApplied = job.Users.Contains(user);
+            Company company = skilledForceDB.Company.Where(c => c.CompanyId.Equals(job.CompanyId)).FirstOrDefault();
+            ViewData["companyName"] = company.Name;
+            return View("JobDetails", job);
+        }
     }
 }

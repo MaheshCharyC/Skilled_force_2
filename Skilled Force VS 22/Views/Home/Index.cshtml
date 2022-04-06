@@ -84,11 +84,13 @@
                             <div class="job-right my-4 flex-shrink-0">
                                 @if (job.IsApplied)
                                 {
-                                    @Html.ActionLink("Cancel application", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @Html.ActionLink("Cancel", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @Html.ActionLink("View", "ViewJob", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("1"))
                                 {
                                     @Html.ActionLink("Apply now", "JobApply", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @Html.ActionLink("View", "ViewJob", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("2") || @Context.Session.GetString("RoleId").Equals("3"))
                                 {

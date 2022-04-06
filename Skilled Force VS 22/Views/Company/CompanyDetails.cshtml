@@ -95,8 +95,12 @@
                         <textarea name="comment" class="form-control form-control-lg"></textarea>
                     </div>
 
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Add Review</button>
-
+                    <div class="row">
+                        <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit">Add Review</button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="button" onclick="goPrev()" >Cancel</button>
+                    </div>
                 }
             </div>
         </div>
@@ -113,3 +117,9 @@
     }
 
 </div>
+<script>
+    function goPrev()
+    {
+        window.history.back();
+    }
+</script>
