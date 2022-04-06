@@ -69,5 +69,9 @@ namespace Skilled_Force_VS_22.Models.DB
         public virtual IList<User> Users { get; set; }
 
         public string CompanyId { get; set; }
+
+        [ForeignKey("CompanyId")]
+        public virtual Company Company { get; set; }
+
     }
 }

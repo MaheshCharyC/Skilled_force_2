@@ -48,25 +48,31 @@ namespace Skilled_Force_VS_22.Controllers
             string userId = HttpContext.Session.GetString("UserId").ToString();
             string roleId = HttpContext.Session.GetString("RoleId").ToString();
             List<Job>? jobs = null;
-            IQueryable<Job>? sqlData = skilledForceDB.Job.Include(job => job.Users);
-            if (roleId.Equals("2"))
-                sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == userId);
+            IQueryable<Job>? sqlQuary = skilledForceDB.Job.Include(job => job.Users);
+            if (roleId.Equals("1"))
+                sqlQuary = skilledForceDB.Job.Include(job => job.Company);
+            else if (roleId.Equals("2"))
+                sqlQuary = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == userId);
             else if (roleId.Equals("3"))
-                sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
+            {
+                sqlQuary = skilledForceDB.Job
+                    .Include(job => job.Users)
+                    .Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
+            }
 
             if (keywords != null && keywords != "")
-                sqlData = sqlData.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
+                sqlQuary = sqlQuary.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
                             j.EmploymentType.Contains(keywords) || j.Location.Contains(keywords) || j.JobType.Contains(keywords));
             if (location != null && location != "")
-                sqlData = sqlData.Where(j => j.Location.Contains(location));
-            if (jobtype != null && jobtype  != "")
-                sqlData = sqlData.Where(j => j.JobType.Contains(jobtype));
+                sqlQuary = sqlQuary.Where(j => j.Location.Contains(location));
+            if (jobtype != null && jobtype != "")
+                sqlQuary = sqlQuary.Where(j => j.JobType.Contains(jobtype));
 
-            jobs = sqlData.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt).ToList();
+            jobs = sqlQuary.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt).ToList();
             if (roleId.Equals("1"))
             {
-                User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
-                jobs.ForEach(job => job.IsApplied = job.Users.Contains(user));
+                User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault(); ;
+                jobs.ForEach(job => job.IsApplied = job.Users!=null && job.Users.Contains(user));
             }
 
             return jobs;

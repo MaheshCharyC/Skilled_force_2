@@ -61,7 +61,7 @@ namespace Skilled_Force_VS_22.Models.DB
 
         public virtual Role Role { get; set; }
 
-        public virtual IList<Job> Jobs { get; set; }
+        //public virtual IList<Job> Jobs { get; set; }
 
         public virtual Company Company { get; set; }
 

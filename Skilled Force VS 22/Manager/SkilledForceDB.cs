@@ -31,6 +31,12 @@ namespace Skilled_Force_VS_22.Manager
                         .HasForeignKey(e => e.UserId)
                         .OnDelete(DeleteBehavior.NoAction);
 
+            //modelBuilder.Entity<Job>()
+            //.HasOne(e => e.Company)
+            //.WithOne(e => e.User)
+            //.HasForeignKey(e => e.UserId)
+            //.OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }
