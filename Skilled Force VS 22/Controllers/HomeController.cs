@@ -48,13 +48,12 @@ namespace Skilled_Force_VS_22.Controllers
             string userId = HttpContext.Session.GetString("UserId").ToString();
             string roleId = HttpContext.Session.GetString("RoleId").ToString();
             List<Job>? jobs = null;
-            IQueryable<Job>? sqlData = null;
+            IQueryable<Job>? sqlData = skilledForceDB.Job.Include(job => job.Users);
             if (roleId.Equals("2"))
                 sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CreatedBy == userId);
             else if (roleId.Equals("3"))
                 sqlData = skilledForceDB.Job.Include(job => job.Users).Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
-            else
-                sqlData = skilledForceDB.Job.Include(job => job.Users);
+
 
             if (keywords != null && keywords != "")
                 sqlData = sqlData.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
