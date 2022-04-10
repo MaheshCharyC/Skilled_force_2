@@ -3,15 +3,15 @@
 }
 
 @model List<Chat>
-
+<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
 <link href="@Url.Content("~/css/Messages.css")" rel="stylesheet" type="text/css" />
 @{
-    var userId = Context.Session.GetString("UserId");
-    var usrImage = "/images/avatardefault.png";
-    var chatId= "";
-    var toUserId = "";
+    string userId = Context.Session.GetString("UserId");
+    string usrImage = "/images/avatardefault.png";
+    string chatId= "";
+    string toUserId = "";
 }
 <div class="container">
 <div class="row clearfix">
@@ -25,23 +25,29 @@
                     @*<input type="text" class="form-control" placeholder="Search...">*@
                 </div>
                 <ul class="list-unstyled chat-list mt-2 mb-0">
-                     @foreach (Chat chat in Model)
+                     @{
+                         foreach (Chat chat in Model)
                         {
+                            string fullName = "";
+                            @if (chat.ToUser.UserId.Equals(userId))
+                            {
+                                fullName = chat.FromUser.FullName;
+                                toUserId = @chat.FromUser.UserId;
+                            }
+                            else
+                            {
+                                fullName = chat.ToUser.FullName;
+                                toUserId = @chat.ToUser.UserId;
+                            }
+                            chatId = @chat.ChatId;
                             <li class="clearfix">
                                 <img src=@usrImage alt="avatar">
                                 <div class="about">
-                                    @if (chat.ToUser.UserId.Equals(userId))
-                                    {
-                                     <div class="name">@chat.FromUser.FullName </div>   
-                                    }
-                                    else
-                                    {
-                                     <div class="name">@chat.ToUser.FullName </div>      
-                                    }
-                                    @chatId = @chat.ChatId;
+                                     <div class="name">@fullName </div>   
                                 </div>
                             </li>
                         }
+                      }
                 </ul>
             </div>
             <div class="chat">
@@ -82,14 +88,14 @@
                 </div>
                 <div class="chat-message clearfix">
                     <div class="input-group mb-0">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-send"></i></span>
-                        </div>
                         @using (Html.BeginForm("SendMessage", "Chat", FormMethod.Post))
-                        {
+                        {                           
                             @Html.Hidden("chatId", @chatId )
                             @Html.Hidden("ToUserId", @toUserId )
-                            <input name="message" type="text" class="form-control" placeholder="Enter text here..."> 
+                            <input name="userMessage" type="text" class="form-control" placeholder="Enter text here..."> 
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-send"></i></span>
+                            </div>
                         }
                     </div>
                 </div>
