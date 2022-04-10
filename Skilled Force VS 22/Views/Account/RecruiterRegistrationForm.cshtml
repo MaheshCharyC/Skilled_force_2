@@ -1,13 +1,22 @@
 ﻿@model User
 
 
-@{ ViewData["Title"] = "Skilled Force User CreationPage"; }
-  <div class="container py-5 h-100">
+@{
+    ViewData["Title"] = "Skilled Force User CreationPage";
+}
+<div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="card shadow-2-strong" style="border-radius: 1rem;">
-          <div class="card-body p-5 text-center">
-            @using (Html.BeginForm("RecruiterRegister", "Account", FormMethod.Post))
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+            @{
+                var form = "RecruiterRegister";
+                if (Context.Session.GetString("RoleId").Equals("2"))
+                {
+                    form = "UpdateRecruiterProfile";
+                }   
+            }
+            @using (Html.BeginForm(form, "Account", FormMethod.Post))    
             {
                 @if (ViewBag.edit)
                 {

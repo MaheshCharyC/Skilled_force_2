@@ -87,13 +87,20 @@ namespace Skilled_Force_VS_22.Controllers
 
 
         [HttpGet]
-        public IActionResult RecruiterRegister()
+        public async Task<IActionResult> RecruiterRegister()
         {
             LoadMetaData();
             ViewBag.edit = false;
             return View("RecruiterRegistrationForm");
         }
 
+        [HttpGet]
+        public IActionResult UpdateRecruiterProfile()
+        {
+            LoadMetaData();
+            ViewBag.edit = false;
+            return View("RecruiterRegistrationForm");
+        }
 
         [HttpPost]
         public IActionResult Register(User user)
@@ -124,7 +131,7 @@ namespace Skilled_Force_VS_22.Controllers
         }
 
         [HttpPost]
-        public IActionResult RecruiterRegister(User user)
+        public Task<IActionResult> RecruiterRegister(User user)
         {            
             SetModel();
             if (ModelState.IsValid)
@@ -133,26 +140,42 @@ namespace Skilled_Force_VS_22.Controllers
                 {
                     skilledForceDB.User.Update(user);
                     ViewBag.success = true;
+                    skilledForceDB.SaveChanges();
+                    return GetRecruiters(1);
                 }
                 int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
                 if (userExists == 0)
                 {
                     skilledForceDB.User.Add(user);
                     ViewBag.success = true;
-                }
-                if (ViewBag.success)
-                {
                     skilledForceDB.SaveChanges();
-                    if (HttpContext.Session.GetString("RoleId").Equals("2")) {
-                        UpdateSession(user);
-                        return RedirectToAction("Index", "Home");
-                    }  else
-                       return GetRecruiters();
+                    return GetRecruiters(1);
                 }
                 ViewBag.Error = "User Email exists";
             }
             return RecruiterRegister();
         }
+
+
+        [HttpPost]
+        public IActionResult UpdateRecruiterProfile(User user)
+        {
+            SetModel();
+            if (ModelState.IsValid)
+            {
+                if (user.UserId != null)
+                {
+                    skilledForceDB.User.Update(user);
+                    ViewBag.success = true;
+                    skilledForceDB.SaveChanges();
+                    UpdateSession(user);
+                    return RedirectToAction("Index", "Home");
+                }
+                ViewBag.Error = "Unable to update";
+            }
+            return UpdateRecruiterProfile();
+        }
+
 
         [HttpPost]
         public IActionResult CompanyRegister(User user)
@@ -255,19 +278,20 @@ namespace Skilled_Force_VS_22.Controllers
             }
         }
 
-        public IActionResult GetRecruiters()
+        public async Task<IActionResult> GetRecruiters(int? pageNumber)
         {
-            List<User> users = skilledForceDB.User.Where(u => u.RoleId.Equals("2") && u.CompanyId.Equals(HttpContext.Session.GetString("CompanyId"))).ToList();
-            ViewBag.users = users;
-            return View("GetRecruiters");
+            IQueryable<User> sqlQuery = skilledForceDB.User.Where(u => u.RoleId.Equals("2") && u.CompanyId.Equals(HttpContext.Session.GetString("CompanyId")));
+            return View(viewName: "GetRecruiters", await PaginatedList<User>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 3));
+            /*ViewBag.users = users;
+            return View("GetRecruiters");*/
         }
 
-        public IActionResult DeleteRecruiter(string userId)
+        public async Task<IActionResult> DeleteRecruiter(string userId)
         {
             User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
             skilledForceDB.User.Remove(user);
             skilledForceDB.SaveChanges();
-            return GetRecruiters();
+            return await GetRecruiters(1);
         }
 
     }

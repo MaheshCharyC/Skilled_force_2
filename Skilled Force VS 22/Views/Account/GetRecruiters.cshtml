@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Skilled Force";
 }
-@model User
+@model Skilled_Force_VS_22.Manager.PaginatedList<User>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
 <link href="@Url.Content("~/css/JobList.css")" rel="stylesheet" type="text/css" />
@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-lg-10 mx-auto">
             <div class="career-search mb-60">
-                @using (Html.BeginForm("Account", "GetRecruiters", FormMethod.Post, new { @class = "career-form mb-60" }))
+                @using (Html.BeginForm("GetRecruiters", "Account", FormMethod.Post, new { @class = "career-form mb-60" }))
                 {
                     <div class="row">
                         <div class="col-md-6 col-lg-3 my-3">
@@ -35,8 +35,8 @@
                 }
 
                 <div class="filter-result">
-                    <p class="mb-30 ff-montserrat">Total users : @Enumerable.Count(ViewBag.users)</p>
-                    @foreach (User user in ViewBag.users)
+                    @*<p class="mb-30 ff-montserrat">Total users : @Enumerable.Count(ViewBag.users)</p>*@
+                    @foreach (var user in Model)
                     {
                         <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
                             <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
@@ -66,27 +66,27 @@
                     }
                 </div>
             </div>
-
-            <!-- START Pagination -->
-            <nav aria-label="Page navigation">
+            @if(Model.Count() > 0){                
+                <nav aria-label="Page navigation">
                 <ul class="pagination pagination-reset justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                            <i class="zmdi zmdi-long-arrow-left"></i>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item d-none d-md-inline-block"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">
-                            <i class="zmdi zmdi-long-arrow-right"></i>
-                        </a>
-                    </li>
+                    @{
+                        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                    }
+                    <a asp-action="GetRecruiters"
+                        asp-route-pageNumber="@(Model.PageIndex - 1)"
+                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                        class="btn btn-lg btn-block btn-primary btn-custom @prevDisabled">
+                        Previous
+                    </a>
+                    <a asp-action="GetRecruiters"
+                        asp-route-pageNumber="@(Model.PageIndex + 1)"
+                        class="btn btn-lg btn-block btn-primary btn-custom @nextDisabled">
+                        Next
+                    </a>
                 </ul>
             </nav>
-            <!-- END Pagination -->
+            }
         </div>
     </div>
 

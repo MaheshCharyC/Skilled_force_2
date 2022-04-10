@@ -20,13 +20,13 @@ namespace Skilled_Force_VS_22.Controllers
             this.skilledForceDB = skilledForceDB;
         }
 
-        public IActionResult Index(string keywords, string location, string jobType)
+        public async Task<IActionResult> Index(string keywords, string location, string jobType, int? pageNumber)
         {
             if (HttpContext.Session.IsAvailable && HttpContext.Session.Keys.Contains("UserId") && HttpContext.Session.GetString("UserId") != null)
             {
                 loadMetaInfo();
-                ViewBag.jobs = GetList(keywords, location, jobType);
-                return View();
+                // ViewBag.jobs = GetListAsync(keywords, location, jobType, 5);
+                return await GetListAsync(keywords, location, jobType, pageNumber).ConfigureAwait(false);
             }
             else
                 return RedirectToAction("LoginForm", "Account");
@@ -43,40 +43,29 @@ namespace Skilled_Force_VS_22.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public List<Job> GetList(string keywords, string location, string jobtype)
+        public async Task<IActionResult> GetListAsync(string keywords, string location, string jobtype, int? pageNumber)
         {
             string userId = HttpContext.Session.GetString("UserId").ToString();
             string roleId = HttpContext.Session.GetString("RoleId").ToString();
-            List<Job>? jobs = null;
-            IQueryable<Job>? sqlQuary = skilledForceDB.Job.Include(job => job.Users);
-            if (roleId.Equals("1"))
-                sqlQuary = skilledForceDB.Job.Include(job => job.Company);
-            else if (roleId.Equals("2"))
-                sqlQuary = skilledForceDB.Job.Include(job => job.Company)
-                    .Include(job => job.Users).Where(j => j.CreatedBy == userId);
+            IQueryable<Job>? sqlQuery = skilledForceDB.Job.Include(job => job.Users);
+            if (roleId.Equals("2"))
+                sqlQuery = skilledForceDB.Job.Where(j => j.CreatedBy == userId);
             else if (roleId.Equals("3"))
-            {
-                sqlQuary = skilledForceDB.Job
-                    .Include(job => job.Users).Include(job => job.Company)
-                    .Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
-            }
+                sqlQuery = skilledForceDB.Job.Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
 
             if (keywords != null && keywords != "")
-                sqlQuary = sqlQuary.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
+                sqlQuery = sqlQuery.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
                             j.EmploymentType.Contains(keywords) || j.Location.Contains(keywords) || j.JobType.Contains(keywords));
             if (location != null && location != "")
-                sqlQuary = sqlQuary.Where(j => j.Location.Contains(location));
+                sqlQuery = sqlQuery.Where(j => j.Location.Contains(location));
             if (jobtype != null && jobtype != "")
-                sqlQuary = sqlQuary.Where(j => j.JobType.Contains(jobtype));
+                sqlQuery = sqlQuery.Where(j => j.JobType.Contains(jobtype));
 
-            jobs = sqlQuary.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt).ToList();
+            sqlQuery = sqlQuery.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt);
             if (roleId.Equals("1"))
-            {
-                User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault(); ;
-                jobs.ForEach(job => job.IsApplied = job.Users!=null && job.Users.Contains(user));
-            }
+                ViewBag.user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
 
-            return jobs;
+            return View(await PaginatedList<Job>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 3));
         }
 
         private void loadMetaInfo()
