@@ -16,6 +16,10 @@ namespace Skilled_Force_VS_22.Manager
 
         public DbSet<CompanyReview> CompanyReview { get; set; }
 
+        public DbSet<Chat> Chat { get; set; }
+
+        public DbSet<Message> Message { get; set; }
+
         public SkilledForceDB(DbContextOptions<SkilledForceDB> options)
             : base(options)
         {

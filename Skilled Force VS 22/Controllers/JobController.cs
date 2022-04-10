@@ -99,6 +99,12 @@ namespace Skilled_Force_VS_22.Controllers
             User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
             Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
             job.Users = new List<User>() { user};
+            Chat chat = new Chat();
+            chat.ToUser = GetUser(job.CreatedBy);
+            chat.FromUser = GetUser(HttpContext.Session.GetString("UserId"));
+            chat.CreatedAt = DateTime.Now;
+            chat.IsRead = false;
+            skilledForceDB.Chat.Add(chat);
             skilledForceDB.SaveChanges();
             ViewBag.success = true;
             return RedirectToAction("Index", "Home");
@@ -106,7 +112,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult JobCancel(string jobId)
         {
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
+            User user = GetUser(HttpContext.Session.GetString("UserId"));
             Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
             job.Users.Remove(user);
             skilledForceDB.SaveChanges();
@@ -123,12 +129,16 @@ namespace Skilled_Force_VS_22.Controllers
         public IActionResult ViewJob(string jobId)
         {
             Job job = skilledForceDB.Job.Include(j => j.Users).Where(j => j.JobId == jobId).FirstOrDefault();
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
-            job.IsApplied = job.Users.Contains(user);
+            job.IsApplied = job.Users.Contains(GetUser(HttpContext.Session.GetString("UserId")));
             Company company = skilledForceDB.Company.Where(c => c.CompanyId.Equals(job.CompanyId)).FirstOrDefault();
             ViewData["companyName"] = company.Name;
             ViewData["companyDesc"] = company.Description;
             return View("JobDetails", job);
+        }
+
+        private User GetUser(string userId)
+        {
+            return skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
         }
     }
 }
