@@ -1,41 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Skilled_Force_VS_22</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Skilled_Force_VS_22</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <_WebToolingArtifacts Remove="Properties\serviceDependencies.json" />
-    <_WebToolingArtifacts Remove="Properties\serviceDependencies.local.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<_WebToolingArtifacts Remove="Properties\serviceDependencies.json" />
+		<_WebToolingArtifacts Remove="Properties\serviceDependencies.local.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Properties\serviceDependencies.json" />
-    <Content Include="Properties\serviceDependencies.local.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Properties\serviceDependencies.json" />
+		<Content Include="Properties\serviceDependencies.local.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-    <None Include="Views\Account\LoginForm.cshtml" />
-    <None Include="Views\Account\CompanyRegistrationForm.cshtml" />
-    <None Include="Views\Account\RecruiterRegistrationForm.cshtml" />
-    <None Include="Views\Account\RegistrationForm.cshtml" />
-	<None Include="Views\Account\GetRecruiters.cshtml" />
-	<None Include="Views\Company\CompanyDetails.cshtml" />
-	<None Include="Views\Job\JobDetails.cshtml" />
-    <None Include="Views\Job\JobPostForm.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Include="Views\Account\LoginForm.cshtml" />
+		<None Include="Views\Account\CompanyRegistrationForm.cshtml" />
+		<None Include="Views\Account\RecruiterRegistrationForm.cshtml" />
+		<None Include="Views\Account\GetAccountDetails.cshtml" />
+		<None Include="Views\Account\RegistrationForm.cshtml" />
+		<None Include="Views\Account\GetRecruiters.cshtml" />
+		<None Include="Views\Company\CompanyDetails.cshtml" />
+		<None Include="Views\Job\JobDetails.cshtml" />
+		<None Include="Views\Job\JobPostForm.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
-		<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	</PackageReference>	  
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
 </Project>

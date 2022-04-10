@@ -66,5 +66,10 @@ namespace Skilled_Force_VS_22.Models.DB
         public virtual Company Company { get; set; }
 
         public virtual IList<CompanyReview> CompanyReviews { get; set; }
+
+        public virtual IList<Job> CreatedJobs { get; set; }
+        public virtual IList<Chat> SentChats { get; set; }
+        public virtual IList<Chat> ReceivedChats { get; set; }
+        public virtual IList<Message> SentMessages { get; set; }
     }
 }

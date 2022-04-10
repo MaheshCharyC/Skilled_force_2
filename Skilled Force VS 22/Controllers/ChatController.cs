@@ -21,42 +21,69 @@ namespace Skilled_Force_VS_22.Controllers
         [HttpPost]
         public IActionResult CreateChat(string ToUserId)
         {
-            Chat chat = new Chat();
-            chat.ToUser = GetUser(ToUserId);
-            chat.FromUser = GetUser(HttpContext.Session.GetString("UserId"));
-            chat.CreatedAt = DateTime.Now;
-            chat.IsRead = false;
-            skilledForceDB.Chat.Add(chat);
+            string? userId = HttpContext.Session.GetString("UserId");
+            User user = GetUser(userId);
+
+            Chat? chat = skilledForceDB.Chat.Where(c => c.FromUserId == userId && c.ToUserId == ToUserId ||
+            c.FromUserId == ToUserId && c.ToUserId == userId).FirstOrDefault();
+            if (chat == null)
+            {
+                chat = new Chat();
+                chat.ToUser = GetUser(ToUserId);
+                chat.FromUser = user;
+                chat.IsRead = false;
+                chat.UpdatedTime = DateTime.Now;
+                skilledForceDB.Chat.Add(chat);
+            }
+            else {
+                chat.UpdatedTime = DateTime.Now;
+                skilledForceDB.Chat.Update(chat);
+            }
+            
             skilledForceDB.SaveChanges();
-            return View();
+            List<Chat> chats = getUserChats(user);
+
+            return View("GetChatList", chats);
+
         }
 
         [HttpGet]
         public IActionResult GetChatList()
         {
             User user = GetUser(HttpContext.Session.GetString("UserId"));
+            List<Chat> chats = getUserChats(user);
+            return View("GetChatList", chats);
+        }
+
+        private List<Chat> getUserChats(User user)
+        {
             List<Chat> chats = skilledForceDB.Chat.Where(c => c.ToUser.Equals(user) || c.FromUser.Equals(user))
-                .Include(c => c.ToUser).Include(c => c.FromUser).OrderByDescending(c => c.CreatedAt).ToList();
-            if(chats.Count() > 0)
+                            .Include(c => c.ToUser).Include(c => c.FromUser).OrderByDescending(c => c.UpdatedTime).ToList();
+            if (chats.Count() > 0)
                 ViewBag.messages = GetMessagesById(chats[0].ChatId).ToList();
             else
                 ViewBag.messages = new List<Message>();
-            return View(chats);
+            return chats;
         }
 
         [HttpPost]
-        public IActionResult SendMessage(string chatId, string userMessage, string ToUserId)
+        public IActionResult SendMessage(string chatId, string userMessage)
         {
+            User user = GetUser(HttpContext.Session.GetString("UserId"));
+            
             Message message = new Message();
-            message.ChatId = chatId;  
-            message.ToUser = GetUser(ToUserId);
-            message.FromUser = GetUser(HttpContext.Session.GetString("UserId"));
-            message.CreatedAt = DateTime.Now;
-            message.UserMessage = userMessage;
-           
+            message.ChatId = chatId;
+            message.Time = DateTime.Now;
+            message.UserMessage = userMessage??"";
+            message.FromUser = user;
+            Chat chat = skilledForceDB.Chat.Where(c=>c.ChatId== chatId).First();
+            chat.UpdatedTime = DateTime.Now;
+
             skilledForceDB.Message.Add(message);
             skilledForceDB.SaveChanges();
-            return View();
+
+            List<Chat> chats = getUserChats(user);
+            return View("GetChatList", chats);
         }
 
         [HttpGet]
@@ -68,8 +95,8 @@ namespace Skilled_Force_VS_22.Controllers
         private List<Message> GetMessagesById(string chatId)
         {
             User user = GetUser(HttpContext.Session.GetString("UserId"));
-            List<Message> messages = skilledForceDB.Message.Where(m => m.ChatId.Equals(chatId)).OrderByDescending(m => m.CreatedAt).ToList();
-            if (messages !=null && messages.Count > 0 && messages[0].ToUser == user)
+            List<Message> messages = skilledForceDB.Message.Where(m => m.ChatId.Equals(chatId)).OrderBy(m => m.Time).ToList();
+            if (messages != null && messages.Count > 0 )
             {
                 Chat chat = skilledForceDB.Chat.Where(c => c.ChatId.Equals(chatId)).FirstOrDefault();
                 chat.IsRead = true;

@@ -49,7 +49,7 @@ namespace Skilled_Force_VS_22.Controllers
             string roleId = HttpContext.Session.GetString("RoleId").ToString();
             IQueryable<Job>? sqlQuery = skilledForceDB.Job.Include(job => job.Users);
             if (roleId.Equals("2"))
-                sqlQuery = skilledForceDB.Job.Where(j => j.CreatedBy == userId);
+                sqlQuery = skilledForceDB.Job.Where(j => j.CreatedByUserId == userId);
             else if (roleId.Equals("3"))
                 sqlQuery = skilledForceDB.Job.Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
 

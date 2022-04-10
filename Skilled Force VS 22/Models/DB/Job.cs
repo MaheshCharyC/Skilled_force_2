@@ -46,13 +46,13 @@ namespace Skilled_Force_VS_22.Models.DB
         [StringLength(50)]
         public string EmploymentType { get; set; }
 
-        [Column("CreatedBy")]
-        [Display(Name = "Created By")]
-        public string CreatedBy { get; set; }
+        [Column("CreatedByUserId")]
+        [Display(Name = "Created By UserId")]
+        public string CreatedByUserId { get; set; }
 
-        [Column("UpdatedBy")]
-        [Display(Name = "Updated By")]
-        public string UpdatedBy { get; set; }
+        [Column("UpdatedByUserId")]
+        [Display(Name = "Updated By UserId")]
+        public string UpdatedByUserId { get; set; }
 
         [Column("CreatedAt")]
         //[DisplayFormat(DataFormatString = "{0:d} at {0:t}", ApplyFormatInEditMode = true)]
@@ -69,9 +69,13 @@ namespace Skilled_Force_VS_22.Models.DB
         public virtual IList<User> Users { get; set; }
 
         public string CompanyId { get; set; }
-/*
-        [ForeignKey("CompanyId")]
-        public virtual Company Company { get; set; }*/
+        /*
+                [ForeignKey("CompanyId")]
+                public virtual Company Company { get; set; }*/
+
+        [ForeignKey("CreatedByUserId")]
+        public virtual User CreatedBy { get; set; }
+
 
     }
 }

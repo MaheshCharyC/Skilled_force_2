@@ -206,6 +206,19 @@ namespace Skilled_Force_VS_22.Controllers
             return CompanyRegister();
         }
 
+        [HttpGet]
+        public IActionResult GetAccountDetails(string? userId)
+        {
+            if (userId==null)
+            {
+                userId = HttpContext.Session.GetString("UserId");
+            }
+            User user = skilledForceDB.User.Where(u => u.UserId == userId).First();
+
+            return View("GetAccountDetails", user);
+        }
+
+
         private void SetModel()
         {
             ModelState.Remove("Jobs");

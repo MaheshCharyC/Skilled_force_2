@@ -13,13 +13,17 @@ namespace Skilled_Force_VS_22.Models.DB
 
         public string UserMessage { get; set; }
 
-        [Column("CreatedAt")]
-        [Display(Name = "Created At")]
-        public DateTime CreatedAt { get; set; }
+        public string ChatId { get; set; }
+
+        public string FromUserId { get; set; }
+
+        public DateTime Time { get; set; }
+
+        [ForeignKey("ChatId")]
+        public virtual Chat Chat { get; set; }
+
+        [ForeignKey("FromUserId")]
         public virtual User FromUser { get; set; }
 
-        public virtual User ToUser { get; set; }
-
-        public string ChatId { get; set; }
     }
 }

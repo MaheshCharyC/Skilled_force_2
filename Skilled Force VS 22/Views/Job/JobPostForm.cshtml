@@ -18,7 +18,7 @@
                         <h3 class="mb-5">Post new Job</h3>    
                     }             
                 @Html.HiddenFor(m => m.JobId)
-                @Html.HiddenFor(m => m.CreatedBy)
+                @Html.HiddenFor(m => m.CreatedByUserId)
                 @Html.HiddenFor(m => m.CreatedAt)
                 @Html.Hidden("CompanyId", @Context.Session.GetString("CompanyId"))
                 <div class="form-outline mb-4">

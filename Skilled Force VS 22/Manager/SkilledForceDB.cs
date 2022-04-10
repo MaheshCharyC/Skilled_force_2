@@ -35,6 +35,43 @@ namespace Skilled_Force_VS_22.Manager
                         .HasForeignKey(e => e.UserId)
                         .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<User>()
+                        .HasMany(e => e.CreatedJobs)
+                        .WithOne(e => e.CreatedBy)
+                        .HasForeignKey(e => e.CreatedByUserId)
+                        .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                        .HasMany(e => e.SentChats)
+                        .WithOne(e => e.FromUser)
+                        .HasForeignKey(e => e.FromUserId)
+                        .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                        .HasMany(e => e.ReceivedChats)
+                        .WithOne(e => e.ToUser)
+                        .HasForeignKey(e => e.ToUserId)
+                        .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                        .HasMany(e => e.SentMessages)
+                        .WithOne(e => e.FromUser)
+                        .HasForeignKey(e => e.FromUserId)
+                        .OnDelete(DeleteBehavior.NoAction);
+
+            //     modelBuilder.Entity<Job>()
+            //.HasOne(j => j.CreatedBy)
+            //.WithMany(u => u.CreatedJobs)
+            //.HasForeignKey<Job>(m => m.UserId1)
+            //.OnDelete(DeleteBehavior.Restrict);
+
+
+            //modelBuilder.Entity<Job>().HasOne(e => e.CreatedBy)
+            //    .WithOne()
+            //    .HasForeignKey<Job>(e => e.CreatedByUserId);
+
+
+
             //modelBuilder.Entity<Job>()
             //.HasOne(e => e.Company)
             //.WithOne(e => e.User)

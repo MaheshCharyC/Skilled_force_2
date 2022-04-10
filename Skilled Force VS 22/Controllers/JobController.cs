@@ -66,14 +66,15 @@ namespace Skilled_Force_VS_22.Controllers
                 job.CompanyId = HttpContext.Session.GetString("CompanyId").ToString();
                 if (job.JobId == null)
                 {
-                    job.CreatedBy = HttpContext.Session.GetString("UserId").ToString();
+                    job.CreatedByUserId = HttpContext.Session.GetString("UserId").ToString();
                     job.CreatedAt = DateTime.Now;
-                    job.UpdatedBy = HttpContext.Session.GetString("UserId").ToString();
+                    job.UpdatedByUserId = HttpContext.Session.GetString("UserId").ToString();
                     job.UpdatedAt = DateTime.Now;
                     skilledForceDB.Job.Add(job);
-                } else
+                }
+                else
                 {
-                    job.UpdatedBy = HttpContext.Session.GetString("UserId").ToString();
+                    job.UpdatedByUserId = HttpContext.Session.GetString("UserId").ToString();
                     job.UpdatedAt = DateTime.Now;
                     skilledForceDB.Job.Update(job);
                 }
@@ -98,11 +99,11 @@ namespace Skilled_Force_VS_22.Controllers
         {
             User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
             Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
-            job.Users = new List<User>() { user};
+            job.Users = new List<User>() { user };
             Chat chat = new Chat();
-            chat.ToUser = GetUser(job.CreatedBy);
+            chat.ToUser = GetUser(job.CreatedByUserId);
             chat.FromUser = GetUser(HttpContext.Session.GetString("UserId"));
-            chat.CreatedAt = DateTime.Now;
+            chat.UpdatedTime = DateTime.Now;
             chat.IsRead = false;
             skilledForceDB.Chat.Add(chat);
             skilledForceDB.SaveChanges();
@@ -128,7 +129,7 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult ViewJob(string jobId)
         {
-            Job job = skilledForceDB.Job.Include(j => j.Users).Where(j => j.JobId == jobId).FirstOrDefault();
+            Job job = skilledForceDB.Job.Include(j => j.Users).Include(j => j.CreatedBy).Where(j => j.JobId == jobId).FirstOrDefault();
             job.IsApplied = job.Users.Contains(GetUser(HttpContext.Session.GetString("UserId")));
             Company company = skilledForceDB.Company.Where(c => c.CompanyId.Equals(job.CompanyId)).FirstOrDefault();
             ViewData["companyName"] = company.Name;

@@ -1,0 +1,55 @@
+﻿@model User
+@using Microsoft.AspNetCore.Http;
+
+@{
+    Boolean isEdit = @Context.Session.GetString("UserId") != null;
+}
+@{
+    ViewData["Title"] = "Skilled Force Registration Page";
+}
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <div class="row">
+                        <h3>First Name</h3>
+                        <p>@Model.FirstName</p>
+                    </div>
+                    <div class="row">
+                        <h3>Last Name</h3>
+                        <p>@Model.LastName</p>
+                    </div>
+                    <div class="row">
+                        <h3>Email</h3>
+                        <p>@Model.Email</p>
+                    </div>
+                    <div class="row">
+                        <h3>Gender</h3>
+                        <p>@Model.Gender</p>
+                    </div>
+                    <div class="row">
+                        <h3>Phone</h3>
+                        <p>@Model.Phone</p>
+                    </div>
+
+                    @if (Model.UserId == Context.Session.GetString("UserId"))
+                    {
+                        @Html.ActionLink("Edit", "EditDetails", "Account",null,new { @class = "btn btn-primary" })
+                    }
+                    else
+                    {
+
+                        @using (Html.BeginForm("CreateChat", "Chat", FormMethod.Post))
+                        {
+                            @Html.Hidden("ToUserId", @Model.UserId)
+                            <button class="btn btn-primary" type="submit">Send Message</button>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

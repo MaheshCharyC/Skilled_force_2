@@ -42,6 +42,7 @@ namespace Skilled_Force_VS_22.Manager
                 context.User.AddRange(
                     new User
                     {
+                        UserId = "1",
                         Email = "seeker@gmail.com",
                         Password = "test",
                         FirstName = "John",
@@ -53,6 +54,7 @@ namespace Skilled_Force_VS_22.Manager
                     },
                     new User
                     {
+                        UserId = "2",
                         Email = "recruiter@gmail.com",
                         Password = "test",
                         FirstName = "Lisa",
@@ -64,6 +66,7 @@ namespace Skilled_Force_VS_22.Manager
                     },
                     new User
                     {
+                        UserId = "3",
                         Email = "admin@gmail.com",
                         Password = "test",
                         FirstName = "Admin F",
@@ -72,7 +75,6 @@ namespace Skilled_Force_VS_22.Manager
                         RoleId = "3",
                         CompanyId = "1",
                         Phone = "6989895454",
-                        UserId = "3",
                     }
 
                 );
@@ -88,8 +90,8 @@ namespace Skilled_Force_VS_22.Manager
                         CompanyId = "1",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
-                        CreatedBy = "2",
-                        UpdatedBy = "2",
+                        CreatedByUserId = "2",
+                        UpdatedByUserId = "2",
                         IsApplied = false
                     }, new Job
                     {
@@ -102,8 +104,8 @@ namespace Skilled_Force_VS_22.Manager
                         CompanyId = "1",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
-                        CreatedBy = "2",
-                        UpdatedBy = "2",
+                        CreatedByUserId = "2",
+                        UpdatedByUserId = "2",
                         IsApplied = false
                     }
                 );
