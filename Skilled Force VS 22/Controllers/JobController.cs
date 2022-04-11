@@ -60,6 +60,8 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("CreatedAt");
             ModelState.Remove("CreatedBy");
             ModelState.Remove("UpdatedBy");
+            ModelState.Remove("CreatedByUserId");
+            ModelState.Remove("UpdatedByUserId");
             ModelState.Remove("Company");
             if (ModelState.IsValid)
             {
