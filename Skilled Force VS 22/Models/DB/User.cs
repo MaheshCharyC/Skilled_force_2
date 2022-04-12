@@ -71,5 +71,6 @@ namespace Skilled_Force_VS_22.Models.DB
         public virtual IList<Chat> SentChats { get; set; }
         public virtual IList<Chat> ReceivedChats { get; set; }
         public virtual IList<Message> SentMessages { get; set; }
+        public virtual IList<JobApplication> JobApplications { get; set; }
     }
 }
