@@ -233,6 +233,10 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("Company");
             ModelState.Remove("CompanyId");
             ModelState.Remove("UserId");
+            ModelState.Remove("CreatedJobs");
+            ModelState.Remove("SentChats");
+            ModelState.Remove("SentMessages");
+            ModelState.Remove("ReceivedChats");
         }
 
         private User getUserIfExists(string Email, string Password)

@@ -13,6 +13,8 @@
     string chatId = "";
     string toUserId = "";
     string fullName = "";
+    string firstName = "";
+    string email = "";
 }
 <div class="container">
     <div class="row clearfix">
@@ -25,26 +27,32 @@
                         </div>
                         @*<input type="text" class="form-control" placeholder="Search...">*@
                     </div>
-                    <ul class="list-unstyled chat-list mt-2 mb-0">
+                    <ul class="list-unstyled chat-list mt-2 mb-0"  style="max-height: 53vh;min-height: 53vh ;overflow-y: auto;" >
                         @{
                             foreach (Chat chat in Model)
                             {
                                 fullName = "";
+                                firstName = "";
+                                email = "";
                                 @if (chat.ToUser.UserId.Equals(userId))
                                 {
                                     fullName = chat.FromUser.FullName;
+                                    firstName = chat.FromUser.FirstName;
+                                    email = chat.FromUser.Email;
                                     toUserId = @chat.FromUser.UserId;
                                 }
                                 else
                                 {
                                     fullName = chat.ToUser.FullName;
+                                    firstName = chat.ToUser.FirstName;
+                                    email = chat.ToUser.Email;
                                     toUserId = @chat.ToUser.UserId;
                                 }
                                 chatId = @chat.ChatId;
                                 <li class="clearfix">
-                                    <img src=@usrImage alt="avatar">
+                                    <img src=@usrImage alt="avatar" data-toggle="tooltip" data-placement="left" title=@firstName>
                                     <div class="about">
-                                        <div class="name">@fullName </div>
+                                        <div class="name">@firstName </div>
                                     </div>
                                 </li>
                             }
@@ -60,13 +68,13 @@
                                 </a>
                                 <div class="chat-about">
                                     <h6 class="m-b-0">@fullName</h6>
-                                    <small>Last seen: 2 hours ago</small>
+                                    <small>@email</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="container vertical-scrollable">
+                    <div>
+                    <div class="container" id="messageContainer" style="height: 44vh; overflow-y: auto;">
                         <div class="chat-history @*row*@">
                             <ul class="m-b-0">
                                 @foreach (Message message in ViewBag.messages)
@@ -88,26 +96,55 @@
                                 }
                             </ul>
                         </div>
-                    </div>
-                    <div class="chat-message clearfix">
-                        @using (Html.BeginForm("SendMessage", "Chat", FormMethod.Post))
-                        {
-                            @Html.Hidden("chatId", @chatId )
-                            @Html.Hidden("ToUserId", @toUserId )
-                            <div class="row">
-                                <div class="col-sm-11">
-                                    <input name="userMessage" type="text" class="form-control" placeholder="Enter text here...">
+                        </div>
+                        <div class="chat-message clearfix">
+                            @using (Html.BeginForm("SendMessage", "Chat", FormMethod.Post))
+                            {
+                                @Html.Hidden("chatId", @chatId )
+                                @Html.Hidden("ToUserId", @toUserId )
+                                <div class="row">
+                                    <div class="col-sm-11">
+                                        <input name="userMessage" type="text" class="form-control" placeholder="Enter text here...">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa fa-send"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-1">
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-send"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.chat {
+    display: flex;
+    flex-direction: column;
+    min-height: 60vh;
+    max-height:60vh;
+    justify-content: space-between;
+}
+</style>
+
+<script>
+
+    function scrollBottom(id){
+        var objDiv = document.getElementById(id);
+    objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    window.onload = function() {
+    scrollBottom("messageContainer");
+
+    
+};
+
+    
+
+        
+        </script>

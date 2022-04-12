@@ -16,7 +16,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-10 mx-auto mb-4">
+        <div class="col-lg-12 mx-auto mb-4">
             <div class="section-title text-center ">
                 <h5 class="top-c-sep">Grow your career with us</h5>
             </div>
@@ -24,17 +24,17 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-10 mx-auto">
+        <div class="col-lg-12 mx-auto">
             <div class="career-search mb-60">
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60" }))
                 {
                     <div class="row">
-                        <div class="col-md-6 col-lg-3 my-3">
+                        <div class="col-md-6 col-lg-4 my-3">
                             <div class="input-group position-relative">
                                 @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control", @placeholder="Keyword search"  })
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-3 my-3">
+                        <div class="col-md-6 col-lg-4 my-3">
                             <div class="">
                                 @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "custom-select" })
                             </div>
@@ -44,15 +44,17 @@
                                 @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-3 my-3">
+                        <div class="col-md-6 col-lg-1 my-3">
                             <button type="submit" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
-                                Search
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+</svg>
                             </button>
                         </div>
                     </div>
                 }
 
-                <div class="filter-result">
+                <div class="filter-result mt-2">
                     @*<p class="mb-30 ff-montserrat">Total Job Openings : @Model.Count </p>*@
                     @foreach (var job in Model)
                     {
@@ -72,11 +74,11 @@
                                 </div>
                                 <div class="job-content" style="margin-left:20px">
                                     <h5>@job.Title</h5>
-                                    <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
-                                        <li class="mr-md-4">
+                                    <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans" style="padding-left:0px">
+                                        <li class="mr-md-4 ">
                                             <i class="zmdi zmdi-pin mr-2"></i> @job.Location
                                         </li>
-                                        <li class="mr-md-4">
+                                        <li class="mr-md-4 mx-3">
                                             <i class="zmdi zmdi-money mr-2"></i> @job.Salary
                                         </li>
                                         <li class="mr-md-4">
@@ -102,7 +104,7 @@
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("2") || @Context.Session.GetString("RoleId").Equals("3"))
                                 {
-                                    @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary mb-2" } )
                                     @Html.ActionLink("Delete", "JobDelete", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
                                 }
                             </div>
@@ -121,7 +123,7 @@
                         <a asp-action="Index"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       class="btn btn-lg btn-block btn-primary btn-custom @prevDisabled">
+                       class="btn btn-lg btn-block btn-primary btn-custom mx-3 @prevDisabled">
                         Previous
                     </a>
                     <a asp-action="Index"

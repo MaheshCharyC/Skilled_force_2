@@ -28,14 +28,14 @@
                     value=""
                     id="form1Example3"
                   />
-                  <label class="form-check-label" for="form1Example3"> Remember password </label>
+                  <label class="form-check-label px-3" for="form1Example3"> Remember password </label>
                 </div>
 
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                <button class="btn btn-primary btn-lg btn-block" type="submit" style="width:100%">Login</button>
                 <hr class="my-4">
                 @Html.ActionLink("Sign up", "Register", "Account")
-                <hr class="my-4">
-                @Html.ActionLink("Sign up as Company", "CompanyRegister", "Account")
+                // @Html.ActionLink("Sign up as Company", "CompanyRegister", "Account", new {@class = "mx-3" })
+                <a class="mx-3" asp-action="/Account/CompanyRegister">Sign up as Company</a>
             }
           </div>
         </div>

@@ -53,11 +53,6 @@ app.UseEndpoints(endpoints =>
        name: "default",
        pattern: "{controller=Company}/{action=GetCompanyDetails}");
 });
-/*
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-*/
 
 using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
 {
