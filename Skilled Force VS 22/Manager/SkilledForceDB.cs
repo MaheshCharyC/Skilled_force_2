@@ -20,6 +20,8 @@ namespace Skilled_Force_VS_22.Manager
 
         public DbSet<Message> Message { get; set; }
 
+        public DbSet<JobApplication> JobApplication { get; set; }
+
         public SkilledForceDB(DbContextOptions<SkilledForceDB> options)
             : base(options)
         {

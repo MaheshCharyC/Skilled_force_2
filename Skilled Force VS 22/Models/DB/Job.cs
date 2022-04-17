@@ -67,6 +67,7 @@ namespace Skilled_Force_VS_22.Models.DB
         [Column("IsApplied")]
         public bool IsApplied { get; set; }
         public virtual IList<User> Users { get; set; }
+        public virtual IList<JobApplication> JobApplications { get; set; }
 
         public string CompanyId { get; set; }
         /*
