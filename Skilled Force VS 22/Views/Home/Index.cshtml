@@ -31,53 +31,50 @@
     <div class="row">
         <div class="col-lg-12 mx-auto">
             <div class="career-search mb-60">
-                @if (@Context.Session.GetString("RoleId").Equals("1"))
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60" }))
                 {
-                    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60" }))
-                    {
-                        <div class="row">
-                            <div class="col-md-6 col-lg-4 my-3">
-                                <div class="input-group position-relative">
-                                    @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control", @placeholder="Keyword search"  })
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 my-3">
-                                <div class="">
-                                    @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "custom-select" })
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-3 my-3">
-                                <div class="">
-                                    @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-1 my-3">
-                                <button type="submit" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                                    </svg>
-                                </button>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 my-3">
+                            <div class="input-group position-relative">
+                                @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control", @placeholder="Keyword search"  })
                             </div>
                         </div>
-                    }
-                }
-                else
-                {
-                    <div style="padding:10px">
-                        <div class="row">
-                            @if (@Context.Session.GetString("RoleId").Equals("2"))
-                            {
-                                <h2 class="col-sm-9">Manage Jobs List</h2>
-                                <div class="col-sm-3">
-                                    @Html.ActionLink("+ Create Job", "JobPostForm", "Job", null, new { @class = "btn btn-lg btn-primary", @style="float: right;"} )
-                                </div>
-                            }
-                            else
-                            {
-                                <h2 class="col-sm-9">Company Job Openings</h2>
-                            }
+                        <div class="col-md-6 col-lg-4 my-3">
+                            <div class="">
+                                @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "custom-select" })
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 my-3">
+                            <div class="">
+                                @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-1 my-3">
+                            <button type="submit" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
+                }
+                @if(!Context.Session.GetString("RoleId").Equals("1"))
+                {
+                <div style="padding:10px">
+                    <div class="row">
+                        @if (@Context.Session.GetString("RoleId").Equals("2"))
+                        {
+                            <h2 class="col-sm-9">Manage Jobs List</h2>
+                            <div class="col-sm-3">
+                                @Html.ActionLink("+ Create Job", "JobPostForm", "Job", null, new { @class = "btn btn-lg btn-primary", @style="float: right;"} )
+                            </div>
+                        }
+                        else
+                        {
+                            <h2 class="col-sm-9">Company Job Openings</h2>
+                        }
+                    </div>
+                </div>
                 }
 
                 <div class="filter-result mt-2">

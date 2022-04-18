@@ -1,72 +1,87 @@
-﻿@model Job
+﻿@model JobDTO
 
 
-@{ ViewData["Title"] = "Skilled Force Job post page"; }
-  <div class="container py-5 h-100">
+@{
+    ViewData["Title"] = "Skilled Force Job post page";
+}
+<div class="container py-5 h-100">
     <div class="d-flex justify-content-center align-items-center h-100">
-      <div class="col-sm-12">
-        <div class="card shadow-2-strong" style="border-radius: 1rem;">
-          <div class="card-body p-5 text-center">
-            @using (Html.BeginForm("PostJob", "Job", FormMethod.Post))
-                {
-                    @if (ViewBag.edit)
+        <div class="col-sm-12">
+            <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    @using (Html.BeginForm("JobPostForm", "Job", FormMethod.Post))
                     {
-                        <h3 class="mb-5">Edit Job</h3>
+                        @if (ViewBag.edit)
+                        {
+                            <h3 class="mb-5">Edit Job</h3>
+                        }
+                        else
+                        {
+                            <h3 class="mb-5">Post new Job</h3>
+                        }
+                        @Html.HiddenFor(m => m.JobId)
+                        @Html.Hidden("CompanyId", @Context.Session.GetString("CompanyId"))
+                        <div class="form-outline mb-4">
+                            <div class="text-danger">
+                                @Html.ValidationMessageFor(m => m.Title)
+                            </div>
+                            @Html.LabelFor(m => m.Title)
+                            @Html.TextBoxFor(m => m.Title, null, new { @class = "form-control form-control-lg" })
+                        </div>
+                        <div class="row">
+                            <div class="form-outline mb-4 col-sm-6">
+                                <div class="text-danger">
+                                    @Html.ValidationMessageFor(m => m.JobType)
+                                </div>
+                                @Html.LabelFor(m => m.JobType)
+                                @Html.TextBoxFor(m => m.JobType, new { id = "JobType", @class = "form-control form-control-lg" })
+                            </div>
+                            <div class="form-outline mb-4 col-sm-6">
+                                <div class="text-danger">
+                                    @Html.ValidationMessageFor(m => m.EmploymentType)
+                                </div>
+                                @Html.LabelFor(m => m.EmploymentType)
+                                @Html.TextBoxFor(m => m.EmploymentType,new { id = "EmploymentType", @class = "form-control form-control-lg" })
+                            </div>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <div class="text-danger">
+                                @Html.ValidationMessageFor(m => m.Description)
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                            @Html.LabelFor(m => m.Description)
+                            @Html.TextAreaFor(m => m.Description, 10, 10, new { @class = "form-control form-control-lg" })
+                        </div>
+                        <div class="row">
+                            <div class="form-outline mb-4 col-sm-6">
+                                <div class="text-danger">
+                                    @Html.ValidationMessageFor(m => m.Location)
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.Location)
+                                @Html.TextBoxFor(m => m.Location, null, new { @class = "form-control form-control-lg" })
+                            </div>
+                            <div class="form-outline mb-4 col-sm-6">
+                                <div class="text-danger">
+                                    @Html.ValidationMessageFor(m => m.Salary)
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Salary, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.Salary)
+                                @Html.TextBoxFor(m => m.Salary, new { @class = "form-control form-control-lg" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit">Submit Job</button>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="button" onclick="goPrev()">Cancel</button>
+                        </div>
                     }
-                    else
-                    {
-                        <h3 class="mb-5">Post new Job</h3>    
-                    }             
-                @Html.HiddenFor(m => m.JobId)
-                @Html.HiddenFor(m => m.CreatedByUserId)
-                @Html.HiddenFor(m => m.CreatedAt)
-                @Html.Hidden("CompanyId", @Context.Session.GetString("CompanyId"))
-                <div class="form-outline mb-4">
-                   @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
-                   @Html.LabelFor(m => m.Title)
-                   @Html.TextBoxFor(m => m.Title, null, new { @class = "form-control form-control-lg" })
                 </div>
-                <div class="row">
-                    <div class="form-outline mb-4 col-sm-6">
-                       @Html.ValidationMessageFor(m => m.JobType, "", new { @class = "text-danger" })
-                       @Html.LabelFor(m => m.JobType)
-                       @Html.DropDownListFor(m => m.JobType, (IEnumerable<SelectListItem>)ViewBag.JobType, new { id = "JobType", @class = "form-control form-control-lg" })
-                    </div>
-                     <div class="form-outline mb-4 col-sm-6">
-                       @Html.ValidationMessageFor(m => m.EmploymentType, "", new { @class = "text-danger" })
-                       @Html.LabelFor(m => m.EmploymentType)
-                       @Html.DropDownListFor(m => m.EmploymentType, (IEnumerable<SelectListItem>)ViewBag.EmploymentType, new { id = "EmploymentType", @class = "form-control form-control-lg" })
-                    </div>
-                </div>
-                <div class="form-outline mb-4">
-                   @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
-                   @Html.LabelFor(m => m.Description)
-                   @Html.TextAreaFor(m => m.Description, 10, 10, new { @class = "form-control form-control-lg" })
-                </div>          
-                 <div class="row">
-                    <div class="form-outline mb-4 col-sm-6">
-                       @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
-                       @Html.LabelFor(m => m.Location)
-                       @Html.TextBoxFor(m => m.Location, null, new { @class = "form-control form-control-lg" })
-                    </div>
-                    <div class="form-outline mb-4 col-sm-6">
-                       @Html.ValidationMessageFor(m => m.Salary, "", new { @class = "text-danger" })
-                       @Html.LabelFor(m => m.Salary)
-                       @Html.TextBoxFor(m => m.Salary, new { @class = "form-control form-control-lg" })
-                    </div>
-                </div>
-                <div class="row">
-                    <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit">Submit Job</button>
-                </div>
-                <div class="row">
-                    <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="button" onclick="goPrev()" >Cancel</button>
-                </div>
-            }
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 <script>
     function goPrev()
     {
