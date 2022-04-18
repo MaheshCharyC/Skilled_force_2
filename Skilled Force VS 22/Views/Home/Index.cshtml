@@ -5,51 +5,77 @@
 
 @model Skilled_Force_VS_22.Manager.PaginatedList<Job>
 
-<div class="text-center">
-    <h5 class="display-4">Hello @Context.Session.GetString("FirstName").<br> Welcome to Skilled Force</h5>
-
-</div>
+@if (@Context.Session.GetString("RoleId").Equals("1"))
+{
+    <div class="text-center">
+        <h5 class="display-4">Hello @Context.Session.GetString("FirstName").<br> Welcome to Skilled Force</h5>
+    </div>
+}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
 <link href="@Url.Content("~/css/JobList.css")" rel="stylesheet" type="text/css" />
 
 
 <div class="container">
-    <div class="row">
-        <div class="col-lg-12 mx-auto mb-4">
-            <div class="section-title text-center ">
-                <h5 class="top-c-sep">Grow your career with us</h5>
+    @if (@Context.Session.GetString("RoleId").Equals("1"))
+    {
+        <div class="row">
+            <div class="col-lg-12 mx-auto mb-4">
+                <div class="section-title text-center ">
+                    <h5 class="top-c-sep">Grow your career with us</h5>
+                </div>
             </div>
         </div>
-    </div>
+    }
 
     <div class="row">
         <div class="col-lg-12 mx-auto">
             <div class="career-search mb-60">
-                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60" }))
+                @if (@Context.Session.GetString("RoleId").Equals("1"))
                 {
-                    <div class="row">
-                        <div class="col-md-6 col-lg-4 my-3">
-                            <div class="input-group position-relative">
-                                @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control", @placeholder="Keyword search"  })
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60" }))
+                    {
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4 my-3">
+                                <div class="input-group position-relative">
+                                    @Html.TextBox("keywords", null, new { id = "keywords", @class = "form-control", @placeholder="Keyword search"  })
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 my-3">
+                                <div class="">
+                                    @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "custom-select" })
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 my-3">
+                                <div class="">
+                                    @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-1 my-3">
+                                <button type="submit" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-4 my-3">
-                            <div class="">
-                                @Html.DropDownList("location", (IEnumerable<SelectListItem>)ViewBag.Locations, new { id = "Location", @class = "custom-select" })
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3 my-3">
-                            <div class="">
-                                @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-1 my-3">
-                            <button type="submit" class="btn btn-lg btn-block btn-light btn-custom" id="contact-submit">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-</svg>
-                            </button>
+                    }
+                }
+                else
+                {
+                    <div style="padding:10px">
+                        <div class="row">
+                            @if (@Context.Session.GetString("RoleId").Equals("2"))
+                            {
+                                <h2 class="col-sm-9">Manage Jobs List</h2>
+                                <div class="col-sm-3">
+                                    @Html.ActionLink("+ Create Job", "JobPostForm", "Job", null, new { @class = "btn btn-lg btn-primary", @style="float: right;"} )
+                                </div>
+                            }
+                            else
+                            {
+                                <h2 class="col-sm-9">Company Job Openings</h2>
+                            }
                         </div>
                     </div>
                 }
@@ -58,7 +84,11 @@
                     @*<p class="mb-30 ff-montserrat">Total Job Openings : @Model.Count </p>*@
                     @foreach (var job in Model)
                     {
-                        <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
+                        <div class="job-box d-md-flex align-items-center justify-content-between mb-30"
+                         onclick="location.href='@(@Context.Session.GetString("RoleId").Equals("1")
+                            ?"/Job/ViewJob?JobId="+job.JobId:
+                            "/JobApplicant/JobApplicantsList?JobId="+job.JobId
+                            )';">
                             <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
                                 <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
                                     @if (@job.Title.Split(" ").Count() > 1)
@@ -85,22 +115,24 @@
                                             <i class="zmdi zmdi-time mr-2"></i> @job.EmploymentType
                                         </li>
                                     </ul>
-                                   @* @if (job.Company != null)
-                                    {
+                                    @* @if (job.Company != null)
+                                        {
                                         @Html.ActionLink("Company: " + @job.Company.Name, "GetCompanyDetails", "Company", new { @job.Company.CompanyId }, new { @class = "" } )
-                                    }*@
+                                        }*@
                                 </div>
                             </div>
                             <div class="job-right my-4 flex-shrink-0">
-                                @if (Context.Session.GetString("RoleId").Equals("1") && job.Users!=null && (job.Users.Where(u => u.UserId.Equals(ViewBag.user.UserId.ToString())).Count() > 0) )
+                                @if (Context.Session.GetString("RoleId").Equals("1"))
                                 {
-                                    @Html.ActionLink("Cancel", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
-                                    @Html.ActionLink("View", "ViewJob", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
-                                }
-                                else if (@Context.Session.GetString("RoleId").Equals("1"))
-                                {
-                                    @Html.ActionLink("Apply now", "JobApply", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
-                                    @Html.ActionLink("View", "ViewJob", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @if (ViewBag.AppliedJobIds.Contains(job.JobId))
+                                    {
+                                        @Html.ActionLink("Cancel Application", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block d-sm-inline-block btn-danger", @style="margin:10px;width:200px" } )
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Apply now", "JobApply", "Job", new { @job.JobId }, new { @class = "btn d-block d-sm-inline-block btn-primary", @style="margin:10px;width:200px" } )
+
+                                    }
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("2") || @Context.Session.GetString("RoleId").Equals("3"))
                                 {
@@ -124,13 +156,13 @@
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        class="btn btn-lg btn-block btn-primary btn-custom mx-3 @prevDisabled">
-                        Previous
-                    </a>
-                    <a asp-action="Index"
+                            Previous
+                        </a>
+                        <a asp-action="Index"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
                        class="btn btn-lg btn-block btn-primary btn-custom @nextDisabled">
-                        Next
-                    </a>
+                            Next
+                        </a>
                     </ul>
                 </nav>
             }

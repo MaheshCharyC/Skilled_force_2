@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Skilled_Force_VS_22.Manager;
 using Skilled_Force_VS_22.Models;
 using Skilled_Force_VS_22.Models.DB;
+using Skilled_Force_VS_22.Util;
 using System.Diagnostics;
 
 namespace Skilled_Force_VS_22.Controllers
@@ -99,26 +100,29 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult JobApply(string jobId)
         {
-            User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId").ToString())).FirstOrDefault();
-            Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
-            job.Users = new List<User>() { user };
-            Chat chat = new Chat();
-            chat.ToUser = GetUser(job.CreatedByUserId);
-            chat.FromUser = GetUser(HttpContext.Session.GetString("UserId"));
-            chat.UpdatedTime = DateTime.Now;
-            chat.IsRead = false;
-            skilledForceDB.Chat.Add(chat);
-            skilledForceDB.SaveChanges();
-            ViewBag.success = true;
+            string userId = HttpContext.Session.GetString("UserId").ToString();
+            if (!skilledForceDB.JobApplication.Where(j => j.JobId == jobId && j.ApplicantUserId == userId).Any())
+            {
+                JobApplication jobApplication = new JobApplication();
+                jobApplication.ApplicantUserId = userId;
+                jobApplication.JobId = jobId;
+                jobApplication.Status = JobApplicationStatusEnum.PENDING;
+                skilledForceDB.JobApplication.Add(jobApplication);
+                skilledForceDB.SaveChanges();
+
+            }
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult JobCancel(string jobId)
         {
-            User user = GetUser(HttpContext.Session.GetString("UserId"));
-            Job job = skilledForceDB.Job.Include(job => job.Users).Where(j => j.JobId == jobId).FirstOrDefault();
-            job.Users.Remove(user);
-            skilledForceDB.SaveChanges();
+            string userId = HttpContext.Session.GetString("UserId").ToString();
+            JobApplication? existingApplication = skilledForceDB.JobApplication.Where(job => job.ApplicantUserId==userId && job.JobId == jobId).FirstOrDefault();
+            if (existingApplication != null) {
+                skilledForceDB.JobApplication.Remove(existingApplication);
+                skilledForceDB.SaveChanges();
+            }
+            
             return RedirectToAction("Index", "Home");
         }
 
@@ -131,11 +135,13 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult ViewJob(string jobId)
         {
-            Job job = skilledForceDB.Job.Include(j => j.Users).Include(j => j.CreatedBy).Where(j => j.JobId == jobId).FirstOrDefault();
-            job.IsApplied = job.Users.Contains(GetUser(HttpContext.Session.GetString("UserId")));
+            string userId = HttpContext.Session.GetString("UserId").ToString();
+            Job job = skilledForceDB.Job.Include(j=>j.CreatedBy).Where(j => j.JobId == jobId).FirstOrDefault();
+            ViewBag.IsApplied = skilledForceDB.JobApplication.Where(job => job.ApplicantUserId == userId && job.JobId == jobId).Any();
+
             Company company = skilledForceDB.Company.Where(c => c.CompanyId.Equals(job.CompanyId)).FirstOrDefault();
-            ViewData["companyName"] = company.Name;
-            ViewData["companyDesc"] = company.Description;
+            ViewBag.companyName = company.Name;
+            ViewBag.companyDesc = company.Description;
             return View("JobDetails", job);
         }
 

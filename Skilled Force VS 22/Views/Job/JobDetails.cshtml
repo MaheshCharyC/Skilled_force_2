@@ -12,7 +12,7 @@
                     <div>
                         <h3 class="mb-5">
                             @Model.Title for
-                            @Html.ActionLink(ViewData["companyName"].ToString(), "GetCompanyDetails", "Company", new { @Model.CompanyId }, new { @class = "" } )
+                            @Html.ActionLink((String)ViewBag.companyName, "GetCompanyDetails", "Company", new { @Model.CompanyId }, new { @class = "" } )
                         </h3>
                     </div>
 
@@ -21,7 +21,7 @@
                             <div class="col-md-8">
                                 <div class="text-left" style="text-align: left">
                                     <h5>Who we are</h5>
-                                    <p class="pb-3">@ViewData["companyDesc"].ToString()</p>
+                                    <p class="pb-3">@ViewBag.companyDesc</p>
 
                                     <h5>What we are looking for</h5>
                                     <p class="pb-3">@Model.Description</p>
@@ -47,9 +47,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        @if (@Model.IsApplied)
+                        @if (@ViewBag.IsApplied)
                         {
-                            @Html.ActionLink("Cancel application", "JobCancel", "Job", new { @Model.JobId }, new { @class = "btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" } )
+                            @Html.ActionLink("Cancel Application", "JobCancel", "Job", new { @Model.JobId }, new { @class = "btn btn-danger btn-lg btn-block mb-4 col-sm-4 offset-sm-4" } )
                         }
                         else
                         {

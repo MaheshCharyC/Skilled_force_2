@@ -47,11 +47,19 @@ namespace Skilled_Force_VS_22.Controllers
         {
             string userId = HttpContext.Session.GetString("UserId").ToString();
             string roleId = HttpContext.Session.GetString("RoleId").ToString();
-            IQueryable<Job>? sqlQuery = skilledForceDB.Job.Include(job => job.Users);
-            if (roleId.Equals("2"))
+            IQueryable<Job>? sqlQuery = skilledForceDB.Job;
+            if (roleId.Equals("1")) //Job Seeker
+            {
+                ViewBag.AppliedJobIds = skilledForceDB.JobApplication.Where(u => u.ApplicantUserId == userId).Select(jApp => jApp.JobId).ToList();
+            }
+            else if (roleId.Equals("2"))
+            {
                 sqlQuery = skilledForceDB.Job.Where(j => j.CreatedByUserId == userId);
+            }
             else if (roleId.Equals("3"))
+            {
                 sqlQuery = skilledForceDB.Job.Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
+            }
 
             if (keywords != null && keywords != "")
                 sqlQuery = sqlQuery.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
@@ -62,8 +70,6 @@ namespace Skilled_Force_VS_22.Controllers
                 sqlQuery = sqlQuery.Where(j => j.JobType.Contains(jobtype));
 
             sqlQuery = sqlQuery.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt);
-            if (roleId.Equals("1"))
-                ViewBag.user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
 
             return View(await PaginatedList<Job>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 3));
         }

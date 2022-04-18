@@ -24,33 +24,33 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            @if (@Context.Session.GetString("RoleId") != null && RoleId.Equals("2"))
+                            @if (@Context.Session.GetString("RoleId") != null)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Job" asp-action="JobPostForm">Post Job</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@((RoleId.Equals("2") || RoleId.Equals("3"))?"Manage Jobs":"Home")</a>
                                 </li>
-                            }
-                             @if (@Context.Session.GetString("RoleId") != null && RoleId.Equals("3"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="GetRecruiters">Manage Users</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="GetCompanyDetails">Company Details</a>
-                                </li>
-                            }
-                            @if (@Context.Session.GetString("RoleId") != null && RoleId.Equals("2") || RoleId.Equals("1"))
-                            {
+                                @if (RoleId.Equals("2"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Job" asp-action="JobPostForm">Post Job</a>
+                                    </li>
+                                }
+                                @if (RoleId.Equals("3"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="GetRecruiters">Manage Users</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="GetCompanyDetails">Company Details</a>
+                                    </li>
+                                }
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="GetChatList">Messages</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="GetAccountDetails">Profile</a>
+                                </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="GetAccountDetails">Profile</a>
-                            </li>
                         </ul>
                     </div>
                     <div class="navbar-right">

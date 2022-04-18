@@ -92,7 +92,6 @@ namespace Skilled_Force_VS_22.Manager
                         UpdatedAt = DateTime.Now,
                         CreatedByUserId = "2",
                         UpdatedByUserId = "2",
-                        IsApplied = false
                     }, new Job
                     {
                         Title = "Test Job 2",
@@ -106,7 +105,6 @@ namespace Skilled_Force_VS_22.Manager
                         UpdatedAt = DateTime.Now,
                         CreatedByUserId = "2",
                         UpdatedByUserId = "2",
-                        IsApplied = false
                     }
                 );
 

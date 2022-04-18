@@ -1,0 +1,70 @@
+﻿@using Skilled_Force_VS_22.Models
+@using Skilled_Force_VS_22.Util;
+@{
+    ViewData["Title"] = "Skilled Force";
+}
+@model Skilled_Force_VS_22.Manager.PaginatedList<JobApplication>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
+<link href="@Url.Content("~/css/JobList.css")" rel="stylesheet" type="text/css" />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="career-search mb-60">
+                <div style="padding:10px">
+                    <div class="row">
+                        <h2 class="col-sm-9">Manage Applicants</h2>
+                    </div>
+                </div>
+
+
+                <div class="filter-result">
+                    @*<p class="mb-30 ff-montserrat">Total users : @Enumerable.Count(ViewBag.users)</p>*@
+                    @foreach (JobApplication jobApplication in Model)
+                    {
+                        <div class="job-box d-md-flex align-items-center justify-content-between mb-30" onclick="location.href='/Account/GetAccountDetails?UserId=@jobApplication.ApplicantUserId';">
+                            <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                                <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
+                                    @jobApplication.ApplicantUser.FirstName[0]
+                                </div>
+                                <div style="margin:30px">
+                                    <h5>@jobApplication.ApplicantUser.FullName</h5>
+                                    <div>Status : @jobApplication.Status</div>
+                                </div>
+                            </div>
+                            <div class="job-right my-4 flex-shrink-0">
+                                @switch (@jobApplication.Status)
+                                {
+                                    case JobApplicationStatusEnum.PENDING:
+                                        @Html.ActionLink("Test Cleared", "UpdateApplicatntStatus", "JobApplicant",
+                            new { JobApplicationId=@jobApplication.JobApplicationId, status=JobApplicationStatusEnum.CLEARED_CODING_TEST }, new { @class = "btn d-block d-sm-inline-block btn-primary" , @style="margin:10px;width:200px" } )
+                                        break;
+                                    case JobApplicationStatusEnum.CLEARED_CODING_TEST:
+                                        @Html.ActionLink("Round1 Selected", "UpdateApplicatntStatus", "JobApplicant",
+                            new { JobApplicationId=@jobApplication.JobApplicationId, status=JobApplicationStatusEnum.CLEARED_R1 }, new { @class = "btn d-block d-sm-inline-block btn-primary" , @style="margin:10px;width:200px" } )
+                                        break;
+                                    case JobApplicationStatusEnum.CLEARED_R1:
+                                        @Html.ActionLink("Round2 Selected", "UpdateApplicatntStatus", "JobApplicant",
+                            new { JobApplicationId=@jobApplication.JobApplicationId, status=JobApplicationStatusEnum.CLEARED_R2 }, new { @class = "btn d-block d-sm-inline-block btn-primary" , @style="margin:10px;width:200px" } )
+                                        break;
+                                    case JobApplicationStatusEnum.CLEARED_R2:
+                                        @Html.ActionLink("Selected!", "UpdateApplicatntStatus", "JobApplicant",
+                            new { JobApplicationId=@jobApplication.JobApplicationId, status=JobApplicationStatusEnum.SELECTED }, new { @class = "btn d-block d-sm-inline-block btn-primary" , @style="margin:10px;width:200px" } )
+                                        break;
+                                }
+                                @if (@jobApplication.Status != JobApplicationStatusEnum.REJECTED)
+                                {
+                                    @Html.ActionLink("Reject", "UpdateApplicatntStatus", "JobApplicant",
+                            new { JobApplicationId=@jobApplication.JobApplicationId, status=JobApplicationStatusEnum.REJECTED }, new { @class = "btn d-block d-sm-inline-block btn-danger" , @style="margin:10px;width:200px" } )
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
