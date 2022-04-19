@@ -76,7 +76,6 @@ namespace Skilled_Force_VS_22.Controllers
 
         private void loadMetaInfo()
         {
-
             List<SelectListItem> Locations = skilledForceDB.Job.GroupBy(J => J.Location).Select(entry => new SelectListItem { Value = entry.Key, Text = entry.Key }).ToList();
             Locations.Insert(0, new SelectListItem { Value = "", Text = "Select Location" });
             ViewBag.Locations = Locations;

@@ -57,7 +57,7 @@ app.UseEndpoints(endpoints =>
 using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<SkilledForceDB>();
-    context.Database.EnsureDeleted();
+    //context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
     SeedData.Initialize(serviceScope.ServiceProvider);
 

@@ -29,25 +29,29 @@
                     <ul class="list-unstyled chat-list mt-2 mb-0"  style="max-height: 53vh;min-height: 53vh ;overflow-y: auto;" >
                         @{
                             foreach (Chat chat in Model)
-                            {
-                                fullName = "";
-                                firstName = "";
-                                email = "";
+                            {                                
+                                chatId = chat.ChatId;   
                                 @if (chat.ToUser.UserId.Equals(userId))
                                 {
-                                    fullName = chat.FromUser.FullName;
+                                    if(ViewBag.chatId == chatId)
+                                    {
+                                        fullName = chat.FromUser.FullName;
+                                        email = chat.FromUser.Email;
+                                    }                                 
                                     firstName = chat.FromUser.FirstName;
-                                    email = chat.FromUser.Email;
-                                    toUserId = @chat.FromUser.UserId;
+                                    toUserId = chat.FromUser.UserId;
                                 }
                                 else
                                 {
-                                    fullName = chat.ToUser.FullName;
+                                    if(ViewBag.chatId == chatId)
+                                    {
+                                        fullName = chat.ToUser.FullName;
+                                        email = chat.ToUser.Email;
+                                    }                                    
                                     firstName = chat.ToUser.FirstName;
-                                    email = chat.ToUser.Email;
-                                    toUserId = @chat.ToUser.UserId;
-                                }
-                                chatId = @chat.ChatId;
+                                    toUserId = chat.ToUser.UserId;
+                                }                            
+
                                 string active = "active";
                                 string blank = "";
                                 <li class="clearfix @((ViewBag.chatId != null && ViewBag.chatId == chatId) ? active: blank)" onclick="location.href='/Chat/GetChatList?chatId=@chatId';">
