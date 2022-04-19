@@ -26,6 +26,7 @@
 		<None Include="Views\Account\RegistrationForm.cshtml" />
 		<None Include="Views\Account\GetRecruiters.cshtml" />
 		<None Include="Views\Company\CompanyDetails.cshtml" />
+		<None Include="Views\JobApplicant\UserJobApplicationsList.cshtml" />
 		<None Include="Views\Job\JobDetails.cshtml" />
 		<None Include="Views\Job\JobPostForm.cshtml" />
 	</ItemGroup>

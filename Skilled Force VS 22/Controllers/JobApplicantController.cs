@@ -32,7 +32,17 @@ namespace Skilled_Force_VS_22.Controllers
             SelectedJobApplication.Status = status;
             skilledForceDB.JobApplication.Update(SelectedJobApplication);
             skilledForceDB.SaveChanges();
-            return RedirectToAction("JobApplicantsList", "JobApplicant",new { JobId = SelectedJobApplication.JobId });
+            return RedirectToAction("JobApplicantsList", "JobApplicant", new { JobId = SelectedJobApplication.JobId });
+
+        }
+
+
+        [HttpGet]
+        public IActionResult UserJobApplicationsList()
+        {
+            string userId = HttpContext.Session.GetString("UserId").ToString();
+            List<JobApplication> jobApplications = skilledForceDB.JobApplication.Include(app=>app.Job).Where(app => app.ApplicantUserId == userId).ToList();
+            return View("UserJobApplicationsList", jobApplications);
 
         }
     }
