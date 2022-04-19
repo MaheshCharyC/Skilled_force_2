@@ -10,11 +10,9 @@
             <div class="card shadow-2-strong" style="border-radius: 1rem;">
                 <div class="card-body p-5 text-center">
             @{
-                var form = "RecruiterRegister";
+                string form = "RecruiterRegister";
                 if (Context.Session.GetString("RoleId").Equals("2"))
-                {
                     form = "UpdateRecruiterProfile";
-                }   
             }
             @using (Html.BeginForm(form, "Account", FormMethod.Post))    
             {
@@ -27,6 +25,13 @@
                 {
                     <h3 class="mb-5">Create User</h3>
                 } 
+                @if(ViewBag.Error != null) {
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        @ViewBag.Error
+                    </div>
+                    @(ViewBag.Error = null)
+                }
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.Hidden("RoleId", 2)
                 @Html.Hidden("CompanyId", @Context.Session.GetString("CompanyId"))

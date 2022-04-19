@@ -33,7 +33,7 @@
             <div class="career-search mb-60">
                 @if (@Context.Session.GetString("RoleId").Equals("1"))
                 {
-                    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "career-form mb-60" }))
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "career-form mb-60" }))
                     {
                         <div class="row">
                             <div class="col-md-6 col-lg-4 my-3">
@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-6 col-lg-3 my-3">
                                 <div class="">
-                                    @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "Location", @class = "custom-select" })
+                                    @Html.DropDownList("jobType", (IEnumerable<SelectListItem>)ViewBag.jobTypes, new { id = "jobType", @class = "custom-select" })
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-1 my-3">
@@ -79,9 +79,12 @@
                         </div>
                     </div>
                 }
-
+                
+                @if(Model.Count == 0)
+                {
+                    <h4 style="padding:20px">No job post's found</h4>
+                }
                 <div class="filter-result mt-2">
-                    @*<p class="mb-30 ff-montserrat">Total Job Openings : @Model.Count </p>*@
                     @foreach (var job in Model)
                     {
                         <div class="job-box d-md-flex align-items-center justify-content-between mb-30"
@@ -115,10 +118,6 @@
                                             <i class="zmdi zmdi-time mr-2"></i> @job.EmploymentType
                                         </li>
                                     </ul>
-                                    @* @if (job.Company != null)
-                                        {
-                                        @Html.ActionLink("Company: " + @job.Company.Name, "GetCompanyDetails", "Company", new { @job.Company.CompanyId }, new { @class = "" } )
-                                        }*@
                                 </div>
                             </div>
                             <div class="job-right my-4 flex-shrink-0">
@@ -136,8 +135,8 @@
                                 }
                                 else if (@Context.Session.GetString("RoleId").Equals("2") || @Context.Session.GetString("RoleId").Equals("3"))
                                 {
-                                    @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary mb-2" } )
-                                    @Html.ActionLink("Delete", "JobDelete", "Job", new { @job.JobId }, new { @class = "btn d-block w-100 d-sm-inline-block btn-primary" } )
+                                    @Html.ActionLink("Edit", "JobEditForm", "Job", new { @job.JobId }, new { @class = "btn d-block d-sm-inline-block btn-primary", @style="margin:10px;width:200px" } )
+                                    @Html.ActionLink("Delete", "JobDelete", "Job", new { @job.JobId }, new { @class = "btn d-block d-sm-inline-block btn-primary", @style="margin:10px;width:200px" } )
                                 }
                             </div>
                         </div>
@@ -153,14 +152,14 @@
                             var nextDisabled = !Model.HasNextPage ? "disabled" : "";
                         }
                         <a asp-action="Index"
-                       asp-route-pageNumber="@(Model.PageIndex - 1)"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       class="btn btn-lg btn-block btn-primary btn-custom mx-3 @prevDisabled">
+                           asp-route-pageNumber="@(Model.PageIndex - 1)"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           class="btn btn-lg btn-block btn-primary btn-custom mx-3 @prevDisabled">
                             Previous
                         </a>
                         <a asp-action="Index"
-                       asp-route-pageNumber="@(Model.PageIndex + 1)"
-                       class="btn btn-lg btn-block btn-primary btn-custom @nextDisabled">
+                           asp-route-pageNumber="@(Model.PageIndex + 1)"
+                           class="btn btn-lg btn-block btn-primary btn-custom @nextDisabled">
                             Next
                         </a>
                     </ul>

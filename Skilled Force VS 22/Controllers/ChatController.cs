@@ -4,6 +4,7 @@ using Skilled_Force_VS_22.Manager;
 using Skilled_Force_VS_22.Models.DB;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Skilled_Force_VS_22.Controllers
 {
@@ -39,32 +40,39 @@ namespace Skilled_Force_VS_22.Controllers
                 chat.UpdatedTime = DateTime.Now;
                 skilledForceDB.Chat.Update(chat);
             }
-            
             skilledForceDB.SaveChanges();
-            List<Chat> chats = getUserChats(user);
-
+            chat = skilledForceDB.Chat.Where(c => c.FromUserId == userId && c.ToUserId == ToUserId ||
+            c.FromUserId == ToUserId && c.ToUserId == userId).FirstOrDefault();
+            List<Chat> chats = getUserChats(user, chat.ChatId);
             return View("GetChatList", chats);
 
         }
 
         [HttpGet]
-        public IActionResult GetChatList()
+        public IActionResult GetChatList(string chatId)
         {
             User user = GetUser(HttpContext.Session.GetString("UserId"));
-            List<Chat> chats = getUserChats(user);
+            List<Chat> chats = getUserChats(user, chatId);
             return View("GetChatList", chats);
         }
 
-        private List<Chat> getUserChats(User user)
+        private List<Chat> getUserChats(User user, string chatId)
         {
             List<Chat> chats = skilledForceDB.Chat.Where(c => c.ToUser.Equals(user) || c.FromUser.Equals(user))
                             .Include(c => c.ToUser).Include(c => c.FromUser).OrderByDescending(c => c.UpdatedTime).ToList();
+            
             if (chats.Count() > 0)
-                ViewBag.messages = GetMessagesById(chats[0].ChatId).ToList();
+            {
+                if (chatId == null)
+                    chatId = chats[0].ChatId;
+                ViewBag.messages = GetMessagesById(chatId).ToList();
+                ViewBag.chatId = chatId;
+            }                
             else
                 ViewBag.messages = new List<Message>();
             return chats;
         }
+
 
         [HttpPost]
         public IActionResult SendMessage(string chatId, string userMessage)
@@ -82,17 +90,18 @@ namespace Skilled_Force_VS_22.Controllers
             skilledForceDB.Message.Add(message);
             skilledForceDB.SaveChanges();
 
-            List<Chat> chats = getUserChats(user);
+            List<Chat> chats = getUserChats(user, chatId);
             return View("GetChatList", chats);
         }
 
         [HttpGet]
         public IActionResult GetMessages(string chatId)
         {
-            return View(GetMessagesById(chatId));
+            return PartialView(GetMessagesById(chatId));
         }
 
-        private List<Message> GetMessagesById(string chatId)
+        [HttpGet]
+        public List<Message> GetMessagesById(string chatId)
         {
             User user = GetUser(HttpContext.Session.GetString("UserId"));
             List<Message> messages = skilledForceDB.Message.Where(m => m.ChatId.Equals(chatId)).OrderBy(m => m.Time).ToList();
@@ -104,6 +113,26 @@ namespace Skilled_Force_VS_22.Controllers
                 skilledForceDB.SaveChanges();
             }
             return messages;
+        }
+
+        [HttpGet]
+        public string GetJsonMessagesById(string chatId)
+        {
+            User user = GetUser(HttpContext.Session.GetString("UserId"));
+            List<Message> messages = skilledForceDB.Message.Where(m => m.ChatId.Equals(chatId)).OrderBy(m => m.Time).ToList();
+            if (messages != null && messages.Count > 0)
+            {
+                Chat chat = skilledForceDB.Chat.Where(c => c.ChatId.Equals(chatId)).FirstOrDefault();
+                chat.IsRead = true;
+                skilledForceDB.Chat.Update(chat);
+                skilledForceDB.SaveChanges();
+                messages.ForEach(c => { 
+                    c.Chat = null;
+                    c.FromUser = null;
+                });
+            }
+
+            return JsonConvert.SerializeObject(messages);
         }
 
         private User GetUser(string userId)

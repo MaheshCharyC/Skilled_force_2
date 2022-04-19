@@ -25,13 +25,8 @@ namespace Skilled_Force_VS_22.Controllers
             companyReview.Time = DateTime.Now;
             skilledForceDB.CompanyReview.Add(companyReview);
             skilledForceDB.SaveChanges();
-
-
             return RedirectToAction("GetCompanyDetails", "Company", new { companyReview.CompanyId });
         }
-
-
-
 
     }
 }

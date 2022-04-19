@@ -152,8 +152,13 @@ namespace Skilled_Force_VS_22.Controllers
                     return GetRecruiters(1);
                 }
                 ViewBag.Error = "User Email exists";
+            } else
+            {
+                if (user.UserId != null)
+                    return EditRecruiterDetails(user.UserId);
             }
             return RecruiterRegister();
+
         }
 
 
@@ -173,14 +178,30 @@ namespace Skilled_Force_VS_22.Controllers
                 }
                 ViewBag.Error = "Unable to update";
             }
-            return UpdateRecruiterProfile();
+            LoadMetaData();
+            ViewBag.edit = true;
+            return View("RecruiterRegistrationForm", user);
         }
 
 
         [HttpPost]
         public IActionResult CompanyRegister(User user)
         {
-            SetModel();
+            ModelState.Remove("Jobs");
+            ModelState.Remove("Role");
+            ModelState.Remove("Company.UserId");
+            ModelState.Remove("Company.CompanyId");
+            ModelState.Remove("Company.User");
+            ModelState.Remove("Company.CompanyReviews");
+            ModelState.Remove("CompanyReviews");
+            ModelState.Remove("Company");
+            ModelState.Remove("CompanyId");
+            ModelState.Remove("UserId");
+            ModelState.Remove("CreatedJobs");
+            ModelState.Remove("SentChats");
+            ModelState.Remove("SentMessages");
+            ModelState.Remove("ReceivedChats");
+            ModelState.Remove("JobApplications");
             if (ModelState.IsValid)
             {
                 if (HttpContext.Session.GetString("UserId") != null)
@@ -237,6 +258,7 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("SentChats");
             ModelState.Remove("SentMessages");
             ModelState.Remove("ReceivedChats");
+            ModelState.Remove("JobApplications");
         }
 
         private User getUserIfExists(string Email, string Password)
@@ -265,7 +287,7 @@ namespace Skilled_Force_VS_22.Controllers
             }            
         }
 
-        public IActionResult EditRecruiterDetails(string userId)
+        public async Task<IActionResult> EditRecruiterDetails(string userId)
         {
             User user = skilledForceDB.User.Where(u => u.UserId.Equals(userId)).FirstOrDefault();
             ViewBag.edit = true;

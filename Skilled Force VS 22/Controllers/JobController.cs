@@ -64,6 +64,7 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("CreatedByUserId");
             ModelState.Remove("UpdatedByUserId");
             ModelState.Remove("Company");
+            ModelState.Remove("JobApplications");
             if (ModelState.IsValid)
             {
                 job.CompanyId = HttpContext.Session.GetString("CompanyId").ToString();
@@ -85,7 +86,10 @@ namespace Skilled_Force_VS_22.Controllers
             }
             else
             {
-                return JobPostForm();
+                if (job.JobId == null)
+                    return JobPostForm();
+                else
+                    return JobEditForm(job.JobId);
             }
             return RedirectToAction("Index", "Home");
         }

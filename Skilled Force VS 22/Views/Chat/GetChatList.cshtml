@@ -23,9 +23,8 @@
                 <div id="plist" class="people-list">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <h5>Conversations</h5>
                         </div>
-                        @*<input type="text" class="form-control" placeholder="Search...">*@
                     </div>
                     <ul class="list-unstyled chat-list mt-2 mb-0"  style="max-height: 53vh;min-height: 53vh ;overflow-y: auto;" >
                         @{
@@ -49,7 +48,9 @@
                                     toUserId = @chat.ToUser.UserId;
                                 }
                                 chatId = @chat.ChatId;
-                                <li class="clearfix">
+                                string active = "active";
+                                string blank = "";
+                                <li class="clearfix @((ViewBag.chatId != null && ViewBag.chatId == chatId) ? active: blank)" onclick="location.href='/Chat/GetChatList?chatId=@chatId';">
                                     <img src=@usrImage alt="avatar" data-toggle="tooltip" data-placement="left" title=@firstName>
                                     <div class="about">
                                         <div class="name">@firstName </div>
@@ -104,10 +105,10 @@
                                 @Html.Hidden("ToUserId", @toUserId )
                                 <div class="row">
                                     <div class="col-sm-11">
-                                        <input name="userMessage" type="text" class="form-control" placeholder="Enter text here...">
+                                        <input name="userMessage" type="text" class="form-control" placeholder="Enter text here..." @(Model.Count == 0 ? "readonly" : "")>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button class="btn btn-primary" type="submit">
+                                        <button class="btn btn-primary" type="submit" @(Model.Count == 0 ? "disabled=disabled" : "")>
                                             <i class="fa fa-send"></i>
                                         </button>
                                     </div>
