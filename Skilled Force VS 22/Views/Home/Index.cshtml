@@ -63,21 +63,21 @@
                 }
                 else
                 {
-                    <div style="padding:10px">
-                        <div class="row">
-                            @if (@Context.Session.GetString("RoleId").Equals("2"))
-                            {
-                                <h2 class="col-sm-9">Manage Jobs List</h2>
-                                <div class="col-sm-3">
-                                    @Html.ActionLink("+ Create Job", "JobPostForm", "Job", null, new { @class = "btn btn-lg btn-primary", @style="float: right;"} )
-                                </div>
-                            }
-                            else
-                            {
-                                <h2 class="col-sm-9">Company Job Openings</h2>
-                            }
-                        </div>
+                <div style="padding:10px">
+                    <div class="row">
+                        @if (@Context.Session.GetString("RoleId").Equals("2"))
+                        {
+                            <h2 class="col-sm-9">Manage Jobs List</h2>
+                            <div class="col-sm-3">
+                                @Html.ActionLink("+ Create Job", "JobPostForm", "Job", null, new { @class = "btn btn-lg btn-primary", @style="float: right;"} )
+                            </div>
+                        }
+                        else
+                        {
+                            <h2 class="col-sm-9">Company Job Openings</h2>
+                        }
                     </div>
+                </div>
                 }
                 
                 @if(Model.Count == 0)

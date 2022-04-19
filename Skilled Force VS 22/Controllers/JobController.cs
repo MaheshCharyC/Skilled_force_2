@@ -21,30 +21,8 @@ namespace Skilled_Force_VS_22.Controllers
         }
         public IActionResult JobPostForm()
         {
-            addMetaDataToViewBag();
             ViewBag.edit = false;
             return View("JobPostForm");
-        }
-
-        private void addMetaDataToViewBag()
-        {
-            ViewBag.JobType = new List<SelectListItem>()
-            {
-                new SelectListItem { Value = "", Text = "Select"},
-                new SelectListItem { Value = "JavaDeveloper", Text = "Java Developer"},
-                new SelectListItem { Value = "WebDeveloper", Text = "Web Developer"},
-                new SelectListItem { Value = "FrontEndDeveloper", Text = "FrontEnd Developer"},
-                new SelectListItem { Value = "Tester", Text = "Tester"},
-                new SelectListItem { Value = "Other", Text = "Other"}
-            };
-            ViewBag.EmploymentType = new List<SelectListItem>()
-            {
-                new SelectListItem { Value = "", Text = "Select"},
-                new SelectListItem { Value = "FullTime", Text = "FullTime"},
-                new SelectListItem { Value = "PartTime", Text = "PartTime"},
-                new SelectListItem { Value = "FullTime - Remote", Text = "FullTime - Remote"},
-                new SelectListItem { Value = "PartTime - Remote", Text = "PartTime - Remote"}
-            };
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -54,8 +32,26 @@ namespace Skilled_Force_VS_22.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostJob(Job job)
+        public IActionResult JobPostForm(JobDTO jobDto)
         {
+            Job job;
+            if (jobDto.JobId != null)
+            {
+                job = skilledForceDB.Job.Where(j => j.JobId == jobDto.JobId).FirstOrDefault();
+            }
+            else
+            {
+                job = new Job();
+            }
+
+            job.JobType = jobDto.JobType;
+            job.EmploymentType = jobDto.EmploymentType;
+            job.Title = jobDto.Title;
+            job.Description = jobDto.Description;
+            job.Location = jobDto.Location;
+            job.Salary = jobDto.Salary;
+            job.CompanyId = jobDto.CompanyId;
+
             ModelState.Remove("JobId");
             ModelState.Remove("Users");
             ModelState.Remove("CreatedAt");
@@ -97,9 +93,19 @@ namespace Skilled_Force_VS_22.Controllers
         public IActionResult JobEditForm(string jobId)
         {
             Job job = skilledForceDB.Job.Where(j => j.JobId == jobId).FirstOrDefault();
+            JobDTO jobDTO = new JobDTO();
+
+            jobDTO.JobType = job.JobType;
+            jobDTO.EmploymentType = job.EmploymentType;
+            jobDTO.Title = job.Title;
+            jobDTO.Description = job.Description;
+            jobDTO.Location = job.Location;
+            jobDTO.Salary = job.Salary;
+            jobDTO.CompanyId = job.CompanyId;
+
+
             ViewBag.edit = true;
-            addMetaDataToViewBag();
-            return View("JobPostForm", job);
+            return View("JobPostForm", jobDTO);
         }
 
         public IActionResult JobApply(string jobId)
@@ -121,12 +127,13 @@ namespace Skilled_Force_VS_22.Controllers
         public IActionResult JobCancel(string jobId)
         {
             string userId = HttpContext.Session.GetString("UserId").ToString();
-            JobApplication? existingApplication = skilledForceDB.JobApplication.Where(job => job.ApplicantUserId==userId && job.JobId == jobId).FirstOrDefault();
-            if (existingApplication != null) {
+            JobApplication? existingApplication = skilledForceDB.JobApplication.Where(job => job.ApplicantUserId == userId && job.JobId == jobId).FirstOrDefault();
+            if (existingApplication != null)
+            {
                 skilledForceDB.JobApplication.Remove(existingApplication);
                 skilledForceDB.SaveChanges();
             }
-            
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -140,7 +147,7 @@ namespace Skilled_Force_VS_22.Controllers
         public IActionResult ViewJob(string jobId)
         {
             string userId = HttpContext.Session.GetString("UserId").ToString();
-            Job job = skilledForceDB.Job.Include(j=>j.CreatedBy).Where(j => j.JobId == jobId).FirstOrDefault();
+            Job job = skilledForceDB.Job.Include(j => j.CreatedBy).Where(j => j.JobId == jobId).FirstOrDefault();
             ViewBag.IsApplied = skilledForceDB.JobApplication.Where(job => job.ApplicantUserId == userId && job.JobId == jobId).Any();
 
             Company company = skilledForceDB.Company.Where(c => c.CompanyId.Equals(job.CompanyId)).FirstOrDefault();

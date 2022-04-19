@@ -76,18 +76,14 @@ namespace Skilled_Force_VS_22.Controllers
 
         private void loadMetaInfo()
         {
-            ViewBag.Locations = new List<SelectListItem>() {
-                    new SelectListItem { Value = "", Text = "Select Location"},
-                    new SelectListItem { Value = "Chicago", Text = "Chicago"},
-                    new SelectListItem { Value = "Michigan", Text = "Michigan"},
-                    new SelectListItem { Value = "New York", Text = "New York"}
-                };
-            ViewBag.jobTypes = new List<SelectListItem>() {
-                    new SelectListItem { Value = "", Text = "Select Job Type"},
-                    new SelectListItem { Value = "Front End Developer", Text = "Front End Developer"},
-                    new SelectListItem { Value = "Java Developer", Text = "Java Developer"},
-                    new SelectListItem { Value = "Web Developer", Text = "Web Developer"}
-                };
+
+            List<SelectListItem> Locations = skilledForceDB.Job.GroupBy(J => J.Location).Select(entry => new SelectListItem { Value = entry.Key, Text = entry.Key }).ToList();
+            Locations.Insert(0, new SelectListItem { Value = "", Text = "Select Location" });
+            ViewBag.Locations = Locations;
+
+            List<SelectListItem> JobTypes = skilledForceDB.Job.GroupBy(J => J.JobType).Select(entry => new SelectListItem { Value = entry.Key, Text = entry.Key }).ToList();
+            JobTypes.Insert(0, new SelectListItem { Value = "", Text = "Select JobType" });
+            ViewBag.jobTypes = JobTypes;
         }
     }
 }
