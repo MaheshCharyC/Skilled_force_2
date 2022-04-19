@@ -320,9 +320,7 @@ namespace Skilled_Force_VS_22.Controllers
         public async Task<IActionResult> GetRecruiters(int? pageNumber)
         {
             IQueryable<User> sqlQuery = skilledForceDB.User.Where(u => u.RoleId.Equals("2") && u.CompanyId.Equals(HttpContext.Session.GetString("CompanyId")));
-            return View(viewName: "GetRecruiters", await PaginatedList<User>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 3));
-            /*ViewBag.users = users;
-            return View("GetRecruiters");*/
+            return View(viewName: "GetRecruiters", await PaginatedList<User>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 5));
         }
 
         public async Task<IActionResult> DeleteRecruiter(string userId)

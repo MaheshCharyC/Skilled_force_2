@@ -71,7 +71,7 @@ namespace Skilled_Force_VS_22.Controllers
 
             sqlQuery = sqlQuery.OrderByDescending(j => j.UpdatedAt).OrderByDescending(j => j.UpdatedAt);
 
-            return View(await PaginatedList<Job>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 3));
+            return View(await PaginatedList<Job>.CreateAsync(source: sqlQuery.AsNoTracking(), pageIndex: pageNumber ?? 1, pageSize: 5));
         }
 
         private void loadMetaInfo()
