@@ -22,6 +22,8 @@ namespace Skilled_Force_VS_22.Controllers
         [HttpPost]
         public IActionResult CreateChat(string ToUserId)
         {
+            if (!HttpContext.Session.Keys.Contains("UserId") || HttpContext.Session.GetString("UserId").Equals("0"))
+                return RedirectToAction("LoginForm", "Account");
             string? userId = HttpContext.Session.GetString("UserId");
             User user = GetUser(userId);
 

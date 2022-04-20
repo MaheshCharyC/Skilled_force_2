@@ -22,14 +22,13 @@ namespace Skilled_Force_VS_22.Controllers
 
         public async Task<IActionResult> Index(string keywords, string location, string jobType, int? pageNumber)
         {
-            if (HttpContext.Session.IsAvailable && HttpContext.Session.Keys.Contains("UserId") && HttpContext.Session.GetString("UserId") != null)
+            if (!HttpContext.Session.Keys.Contains("UserId"))
             {
-                loadMetaInfo();
-                // ViewBag.jobs = GetListAsync(keywords, location, jobType, 5);
-                return await GetListAsync(keywords, location, jobType, pageNumber).ConfigureAwait(false);
+                HttpContext.Session.SetString("RoleId", "0");
+                HttpContext.Session.SetString("UserId", "0");
             }
-            else
-                return RedirectToAction("LoginForm", "Account");
+            loadMetaInfo();
+            return await GetListAsync(keywords, location, jobType, pageNumber).ConfigureAwait(false);
         }
 
 
@@ -45,9 +44,9 @@ namespace Skilled_Force_VS_22.Controllers
         }
         public async Task<IActionResult> GetListAsync(string keywords, string location, string jobtype, int? pageNumber)
         {
+            IQueryable<Job>? sqlQuery = skilledForceDB.Job;
             string userId = HttpContext.Session.GetString("UserId").ToString();
             string roleId = HttpContext.Session.GetString("RoleId").ToString();
-            IQueryable<Job>? sqlQuery = skilledForceDB.Job;
             if (roleId.Equals("1")) //Job Seeker
             {
                 ViewBag.AppliedJobIds = skilledForceDB.JobApplication.Where(u => u.ApplicantUserId == userId).Select(jApp => jApp.JobId).ToList();
@@ -60,7 +59,6 @@ namespace Skilled_Force_VS_22.Controllers
             {
                 sqlQuery = skilledForceDB.Job.Where(j => j.CompanyId == HttpContext.Session.GetString("CompanyId").ToString());
             }
-
             if (keywords != null && keywords != "")
                 sqlQuery = sqlQuery.Where(j => j.Title.Contains(keywords) || j.Description.Contains(keywords) || j.Salary.Contains(keywords) ||
                             j.EmploymentType.Contains(keywords) || j.Location.Contains(keywords) || j.JobType.Contains(keywords));

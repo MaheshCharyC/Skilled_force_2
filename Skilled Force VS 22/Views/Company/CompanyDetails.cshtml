@@ -64,45 +64,34 @@
                          }
                     </div>
                     <div>
-                        @if (@Context.Session.GetString("UserId") != null)
-                        {
-                            <div class="row">
-                                <div class="col-12">
-                                    @using (Html.BeginForm("AddReview", "CompanyReview", FormMethod.Post))
-                                    {
-                                        <input type="hidden" value="@Model.CompanyId" name="CompanyId" />
-
-                                        <div class="stars">
-                                            <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" /> <label class="star star-1" for="star-1"></label>
-                                            <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" /> <label class="star star-2" for="star-2"></label>
-                                            <input class="star star-3" id="star-3" type="radio" name="Rating" value="3" /> <label class="star star-3" for="star-3"></label>
-                                            <input class="star star-4" id="star-4" type="radio" name="Rating" value="4" /> <label class="star star-4" for="star-4"></label>
-                                            <input class="star star-5" id="star-5" type="radio" name="Rating" value="5" /> <label class="star star-5" for="star-5"></label>
-                                        </div>
-
-
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="typeEmailX-2">Your Review</label>
-                                            <textarea name="comment" class="form-control form-control-lg" required></textarea>
-                                        </div>
-
-                                        <div class="row">
-                                            <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit">Add Review</button>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+                        @{
+                            bool sessionExists = @Context.Session.GetString("UserId") != null && !@Context.Session.GetString("UserId").Equals("0");
                         }
-                        else
-                        {
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col text-center">
-                                        @Html.ActionLink("Login", "LoginForm", "Account",null,new {@class="btn btn-primary"})
+                        <div class="row">
+                            <div class="col-12">
+                                @using (Html.BeginForm("AddReview", "CompanyReview", FormMethod.Post))
+                                {
+                                    <input type="hidden" value="@Model.CompanyId" name="CompanyId" />
+
+                                    <div class="stars">
+                                        <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" /> <label class="star star-1" for="star-1"></label>
+                                        <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" /> <label class="star star-2" for="star-2"></label>
+                                        <input class="star star-3" id="star-3" type="radio" name="Rating" value="3" /> <label class="star star-3" for="star-3"></label>
+                                        <input class="star star-4" id="star-4" type="radio" name="Rating" value="4" /> <label class="star star-4" for="star-4"></label>
+                                        <input class="star star-5" id="star-5" type="radio" name="Rating" value="5" /> <label class="star star-5" for="star-5"></label>
                                     </div>
-                                </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="typeEmailX-2">Your Review</label>
+                                        <textarea name="comment" class="form-control form-control-lg" required @(!sessionExists ? "disabled=disabled" : "")></textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <button class="btn btn-primary btn-lg btn-block mb-4 col-sm-4 offset-sm-4" type="submit" @(!sessionExists ? "disabled=disabled" : "")>Add Review</button>
+                                    </div>
+                                }
                             </div>
-                        }
+                        </div>
                     </div>
                 </div>
             </div>

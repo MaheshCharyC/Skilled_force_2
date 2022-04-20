@@ -86,22 +86,16 @@
                     @foreach (var job in Model)
                     {
                         <div class="job-box d-md-flex align-items-center justify-content-between mb-30"
-                         onclick="location.href='@(@Context.Session.GetString("RoleId").Equals("1")
-                            ?"/Job/ViewJob?JobId="+job.JobId:
-                            "/JobApplicant/JobApplicantsList?JobId="+job.JobId
-                            )';">
+                         onclick="location.href='@(@Context.Session.GetString("RoleId").Equals("2") ? "/JobApplicant/JobApplicantsList?JobId="+job.JobId : "/Job/ViewJob?JobId="+job.JobId)';">
                             <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
                                 <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
                                     @if (@job.Title.Split(" ").Count() > 1)
                                     {
                                         @job.Title.Split(" ")[0].Substring(0,1).ToUpper()
-
                                         @job.Title.Split(" ")[1].Substring(0,1).ToUpper()
                                     }
                                     else
-                                    {
                                         @job.Title.Substring(0,2).ToUpper()
-                                    }
                                 </div>
                                 <div class="job-content" style="margin-left:20px">
                                     <h5>@job.Title</h5>
@@ -119,9 +113,9 @@
                                 </div>
                             </div>
                             <div class="job-right my-4 flex-shrink-0">
-                                @if (Context.Session.GetString("RoleId").Equals("1"))
+                                @if (Context.Session.GetString("RoleId").Equals("1") || Context.Session.GetString("RoleId").Equals("0"))
                                 {
-                                    @if (ViewBag.AppliedJobIds.Contains(job.JobId))
+                                    @if (ViewBag.AppliedJobIds != null && ViewBag.AppliedJobIds.Contains(job.JobId))
                                     {
                                         @Html.ActionLink("Cancel Application", "JobCancel", "Job", new { @job.JobId }, new { @class = "btn d-block d-sm-inline-block btn-danger", @style="margin:10px;width:200px" } )
                                     }

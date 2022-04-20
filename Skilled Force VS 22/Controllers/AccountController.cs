@@ -307,14 +307,13 @@ namespace Skilled_Force_VS_22.Controllers
 
         public void UpdateSession(User user)
         {
+            HttpContext.Session.Clear();
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("Email", user.Email);
             HttpContext.Session.SetString("FirstName", user.FirstName);
             HttpContext.Session.SetString("RoleId", user.RoleId);
             if(user.CompanyId != null)
-            {
                 HttpContext.Session.SetString("CompanyId", user.CompanyId);
-            }
         }
 
         public async Task<IActionResult> GetRecruiters(int? pageNumber)

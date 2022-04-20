@@ -110,6 +110,8 @@ namespace Skilled_Force_VS_22.Controllers
 
         public IActionResult JobApply(string jobId)
         {
+            if (HttpContext.Session.GetString("UserId").Equals("0"))
+                return RedirectToAction("LoginForm", "Account");
             string userId = HttpContext.Session.GetString("UserId").ToString();
             if (!skilledForceDB.JobApplication.Where(j => j.JobId == jobId && j.ApplicantUserId == userId).Any())
             {
