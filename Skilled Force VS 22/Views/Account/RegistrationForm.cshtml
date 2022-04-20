@@ -1,7 +1,7 @@
 ﻿@model User
 
 @{
-    Boolean isEdit = @Context.Session.GetString("UserId") != null;
+    Boolean isEdit = @Context.Session.GetString("UserId") != null && !@Context.Session.GetString("UserId").Equals("0");
 }
 @{ ViewData["Title"] = "Skilled Force Registration Page"; }
   <div class="container py-5 h-100">

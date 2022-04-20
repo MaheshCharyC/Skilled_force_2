@@ -61,7 +61,7 @@ namespace Skilled_Force_VS_22.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            if (HttpContext.Session.GetString("UserId") != null)
+            if (HttpContext.Session.GetString("UserId") != null && !HttpContext.Session.GetString("UserId").Equals("0"))
             {
                 HttpContext.Session.Clear();
                 TempData.Clear();
@@ -108,7 +108,7 @@ namespace Skilled_Force_VS_22.Controllers
             SetModel();
             if (ModelState.IsValid)
             {
-                if (HttpContext.Session.GetString("UserId") != null)
+                if (HttpContext.Session.GetString("UserId") != null && !HttpContext.Session.GetString("UserId").Equals("0"))
                 {
                     user.UserId = HttpContext.Session.GetString("UserId").ToString();
                     skilledForceDB.User.Update(user);
@@ -204,7 +204,7 @@ namespace Skilled_Force_VS_22.Controllers
             ModelState.Remove("JobApplications");
             if (ModelState.IsValid)
             {
-                if (HttpContext.Session.GetString("UserId") != null)
+                if (HttpContext.Session.GetString("UserId") != null && HttpContext.Session.GetString("UserId").Equals("0"))
                 {
                     user.UserId = HttpContext.Session.GetString("UserId").ToString();
                     skilledForceDB.User.Update(user);
@@ -280,10 +280,13 @@ namespace Skilled_Force_VS_22.Controllers
             {
                 User user = skilledForceDB.User.Include(u => u.Company).Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
                 return View("RecruiterRegistrationForm", user);
-            } else
+            } else if (HttpContext.Session.GetString("RoleId").Equals("1"))
             {
                 User user = skilledForceDB.User.Where(u => u.UserId.Equals(HttpContext.Session.GetString("UserId"))).FirstOrDefault();
                 return View("RegistrationForm", user);
+            } else
+            {
+                return View("LoginForm");
             }            
         }
 
