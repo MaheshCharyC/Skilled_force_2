@@ -4,6 +4,9 @@
 @{
     ViewData["Title"] = "Skilled Force User CreationPage";
 }
+<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -90,3 +93,16 @@
         window.history.back();
     }
 </script>
+<script type="text/javascript">
+    $(document).ready(function () { 
+        toastr.options = {
+            positionClass: 'toast-top-center'
+        };
+       if('@TempData.Peek("Error")' != ""){
+          toastr.error('@TempData["Error"]');
+       } 
+       if('@TempData.Peek("Success")' != ""){
+          toastr.error('@TempData["Success"]');
+       }
+    });
+</script> 

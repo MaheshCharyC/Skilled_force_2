@@ -39,7 +39,7 @@
 
                                 <h5>Salary</h5>
                                 <p class="pb-3">@Model.Salary</p>
-                                <h5>Recruter</h5>
+                                <h5>Recruiter</h5>
                                 <p class="pb-3">
                                     @Html.ActionLink(Model.CreatedBy.FullName, "GetAccountDetails", "Account", new { UserId=@Model.CreatedByUserId }, new { @class = "" } )
                                 </p>

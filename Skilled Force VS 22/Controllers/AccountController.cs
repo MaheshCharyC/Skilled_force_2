@@ -15,6 +15,9 @@ namespace Skilled_Force_VS_22.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly SkilledForceDB skilledForceDB;
+        private readonly string registeredUserMsg = "Registered successfully";
+        private readonly string updatedUserMsg = "Updated successfully!";
+        private readonly string errorMsg = "Email exists!";
 
         public AccountController(ILogger<AccountController> logger, SkilledForceDB skilledForceDB)
         {
@@ -114,7 +117,7 @@ namespace Skilled_Force_VS_22.Controllers
                     skilledForceDB.User.Update(user);
                     skilledForceDB.SaveChanges();
                     UpdateSession(user);
-                    ViewBag.success = true;
+                    TempData["Success"] = updatedUserMsg;
                     return RedirectToAction("Index", "Home");
                 }
                 int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
@@ -122,10 +125,10 @@ namespace Skilled_Force_VS_22.Controllers
                 {
                     skilledForceDB.User.Add(user);
                     skilledForceDB.SaveChanges();
-                    ViewBag.SuccessMessage = "Saved User Successfully";
+                    TempData["Success"] = registeredUserMsg;
                     return LoginForm();
                 }
-                ViewBag.Error = "User Email exists";
+                TempData["Error"] = errorMsg;
             }
             return Register();
         }
@@ -141,6 +144,7 @@ namespace Skilled_Force_VS_22.Controllers
                     skilledForceDB.User.Update(user);
                     ViewBag.success = true;
                     skilledForceDB.SaveChanges();
+                    TempData["Success"] = updatedUserMsg;
                     return GetRecruiters(1);
                 }
                 int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
@@ -149,9 +153,10 @@ namespace Skilled_Force_VS_22.Controllers
                     skilledForceDB.User.Add(user);
                     ViewBag.success = true;
                     skilledForceDB.SaveChanges();
+                    TempData["Success"] = registeredUserMsg;
                     return GetRecruiters(1);
                 }
-                ViewBag.Error = "User Email exists";
+                TempData["Error"] = errorMsg;
             } else
             {
                 if (user.UserId != null)
@@ -210,7 +215,7 @@ namespace Skilled_Force_VS_22.Controllers
                     skilledForceDB.User.Update(user);
                     skilledForceDB.SaveChanges();
                     UpdateSession(user);
-                    ViewBag.success = true;
+                    TempData["Success"] = updatedUserMsg;
                     return RedirectToAction("Index", "Home");
                 }
                 int userExists = skilledForceDB.User.Where(u => u.Email == user.Email).Count();
@@ -219,10 +224,10 @@ namespace Skilled_Force_VS_22.Controllers
                     skilledForceDB.User.Add(user);
                     user.CompanyId = user.Company.CompanyId.ToString();
                     skilledForceDB.SaveChanges();
-                    ViewBag.SuccessMessage = "Saved User Successfully";
+                    TempData["Success"] = registeredUserMsg;
                     return LoginForm();
                 }
-                ViewBag.Error = "User Email exists";
+                TempData["Error"] = errorMsg;
             }
             return CompanyRegister();
         }
