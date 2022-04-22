@@ -5,6 +5,9 @@
 
 @model Skilled_Force_VS_22.Manager.PaginatedList<Job>
 
+<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 @if (@Context.Session.GetString("RoleId").Equals("1"))
 {
     <div class="text-center">
@@ -159,5 +162,18 @@
             }
         </div>
     </div>
-
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () { 
+        toastr.options = {
+            positionClass: 'toast-top-center'
+        };
+       if('@TempData.Peek("Error")' != ""){
+          toastr.error('@TempData["Error"]');
+       } 
+       if('@TempData.Peek("Success")' != ""){
+          toastr.success('@TempData["Success"]');
+       }
+    });
+</script> 

@@ -70,18 +70,21 @@ namespace Skilled_Force_VS_22.Controllers
                     job.CreatedAt = DateTime.Now;
                     job.UpdatedByUserId = HttpContext.Session.GetString("UserId").ToString();
                     job.UpdatedAt = DateTime.Now;
+                    TempData["Success"] = "Created Job post successfully!";
                     skilledForceDB.Job.Add(job);
                 }
                 else
                 {
                     job.UpdatedByUserId = HttpContext.Session.GetString("UserId").ToString();
                     job.UpdatedAt = DateTime.Now;
+                    TempData["Success"] = "Update Job post successfully!";
                     skilledForceDB.Job.Update(job);
                 }
                 skilledForceDB.SaveChanges();
             }
             else
             {
+                TempData["Error"] = "Error posting job";
                 if (job.JobId == null)
                     return JobPostForm();
                 else
